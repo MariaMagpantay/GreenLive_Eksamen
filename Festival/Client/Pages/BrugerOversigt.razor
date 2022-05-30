@@ -1,0 +1,184 @@
+﻿@using Festival.Client.Service
+
+@using Festival.Shared.Models
+
+@using Festival.Shared.Views;
+
+@using System.Net
+
+@using System.Diagnostics
+
+@page "/brugeroversigt"
+<PageTitle>Bruger Oversigten</PageTitle>
+
+
+<h3>Bruger Oversigt</h3>
+
+<table class="table">
+
+    <tr>
+
+        <th>Person ID</th>
+
+        <th>Navn</th>
+
+        <th>Telefon</th>
+
+        <th>Email</th>
+
+        <th>Fødselsdato</th>
+
+        <th>Rolle</th>
+
+    </tr>
+
+    @foreach (var item in PersonListe) //loop
+
+    {
+
+        Dictionary<int, string> RolleTitel = new Dictionary<int, string>();
+
+        RolleTitel.Add(1, "Frivillig");
+
+        RolleTitel.Add(2, "Koordinator");
+
+        Console.WriteLine(RolleTitel[1]);
+
+        <tr>
+
+            <td>@item.PersonID</td>
+
+            <td>@item.PersonNavn</td>
+
+            <td>@item.PersonTlf</td>
+
+            <td>@item.PersonEmail</td>
+
+            <td>
+                @item.PersonFoedselsdato.Day/@item.PersonFoedselsdato.Month/@item.PersonFoedselsdato.Year
+            </td>
+
+            <td>@RolleTitel[item.RolleID]</td>
+
+            <td><button style="background-color:red" type="button" @onclick="() => OnDeletePerson(item)">Slet</button></td>
+            <td><button style="background-color:yellow" type="button" @onclick="() => ShowEditSection(item.PersonID)">Ret</button></td>
+
+        </tr>
+
+    }
+
+</table>
+<div style="@(editSectionVisible ? "display:block" : "display:none")">
+    <EditForm EditContext="@EditContext" class="row p-3">
+        <div class="col-md-6 mb-3">
+            <label for="PersonNavn">Indtast dit fulde navn</label>
+            <InputText id="PersonNavn" @bind-Value="PersonToUpdate.PersonNavn" class="form-control" />
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="PersonEmail">Indtast din email</label>
+            <InputText id="PersonEmail" @bind-Value="PersonToUpdate.PersonEmail" class="form-control" />
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="PersonTlf">Indtast dit telefonnummer</label>
+            <InputText id="PersonTlf" @bind-Value="PersonToUpdate.PersonTlf" class="form-control" />
+        </div>
+    </EditForm>
+    <button style="background-color:yellow" type="button" @onclick="() => UpdatePerson(PersonToUpdate)">Gem opdaterede oplysninger</button>
+</div>
+
+
+
+
+@code {
+
+    [Inject]
+
+    public IPersonService PersonService { get; set; }
+
+
+
+    Person PersonToUpdate = new Person();
+    private EditContext EditContext;
+    private List<Person> PersonListe = new List<Person>();
+
+    private bool editSectionVisible = false;
+
+    private int ErrorCode { get; set; } = 0;
+
+    private int IDSelected { get; set; }
+
+
+
+
+
+    protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides
+
+    {
+
+        Console.WriteLine("kalder api/person");
+        EditContext = new EditContext(PersonToUpdate);
+        PersonListe = (await PersonService.GetAllPersoner()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.
+    }
+
+
+
+    public async Task OnDeletePerson(Person item)
+
+    {
+
+        IDSelected = item.PersonID;
+
+        ErrorCode = (await PersonService.DeletePerson(IDSelected));
+
+        Console.WriteLine($"Id seletected to delete {IDSelected}, responsecode: {ErrorCode} ");
+
+        if (ErrorCode == (int)HttpStatusCode.OK)
+
+        {
+
+            PersonListe = (await PersonService.GetAllPersoner()).ToList();
+
+
+
+        }
+    }
+
+    public void ShowEditSection(int PersonId)
+    {
+        this.editSectionVisible = true;
+        PersonToUpdate = new Person();
+        PersonToUpdate.PersonID = PersonId;
+    }
+
+    public async Task UpdatePerson(Person item)
+
+    {
+        editSectionVisible = false;
+        IDSelected = item.PersonID;
+
+
+        ErrorCode = (await PersonService.UpdatePerson(item));
+
+        Console.WriteLine($"Id seletected to update {IDSelected}, responsecode: {ErrorCode} ");
+
+        if (ErrorCode == (int)HttpStatusCode.OK)
+
+        {
+
+            PersonListe = (await PersonService.GetAllPersoner()).ToList();
+
+
+
+        }
+
+
+
+    }
+
+    //opdeling af get på frivillige og på koordinator
+
+    //lav 2 seperate Get metoder en getallfrivillige og getallkoordinator ved at tilføje where rolle_id = 1 på sql statement
+
+}

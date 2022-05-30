@@ -1,0 +1,163 @@
+﻿@using Festival.Client.Service
+@using Festival.Shared.Models
+@using Festival.Shared.Views;
+@using System.Net
+@using System.Diagnostics
+@page "/"
+@page "/vagtbooking"
+
+<PageTitle>Vagt Booking</PageTitle>
+
+
+<table class="table">
+
+    <tr>
+
+        <th>Vagt ID</th>
+
+        <th>Start Tid</th>
+
+        <th>Slut Tid</th>
+
+        <th>Dato</th>
+
+        <th>Vagt Type</th>
+
+        <th>Opgave Navn</th>
+
+        <th>Opgave Beskrivelse</th>
+
+
+    </tr>
+
+
+    @foreach (var item in LedigeVagter) //loop
+
+    {
+        <tr>
+            @if (@item.PersonID < 1)
+            {
+                <td>@item.VagtID</td>
+
+                <td>@item.StartTid.Hour</td>
+
+                <td>@item.SlutTid.Hour</td>
+
+                <td>@item.Dato.Date</td>
+
+                <td>@item.Type</td>
+
+                <td>@item.OpgaveNavn</td>
+
+                <td>@item.Beskrivelse</td>
+
+                <td><button style="background-color:darkblue" type="button" @onclick="() => showTagVagtSection(item)">Tag Vagt</button></td> 
+            }
+            else
+            {
+                <td></td>
+            }
+        </tr>
+    }
+</table>
+<div style="@(TagVagtSectionVisible ? "display:block" : "display:none")"> 
+
+    <EditForm EditContext="@EditContext" class="row p-3"> 
+
+        <div class="col-md-6 mb-3"> 
+
+            <label for="Personid">Indtast dit person ID</label> 
+
+            <InputNumber id="PersonID" @bind-Value="VagtToUpdate.PersonID" class="form-control" /> 
+
+        </div> 
+
+    </EditForm> 
+
+    <button style="background-color:yellow" type="button" @onclick="() => UpdateVagt(VagtToUpdate)">Godkend Vagt</button> 
+
+</div> 
+
+
+
+@code {
+
+    [Inject]
+
+    public IVagtService VagtService { get; set; }
+
+
+    private List<VagtView> LedigeVagter = new List<VagtView>();
+
+    Vagt VagtToUpdate = new Vagt(); 
+
+    private EditContext EditContext; 
+
+    private int ErrorCode { get; set; } = 0;
+
+    private bool TagVagtSectionVisible = false; 
+
+    private int IDSelected { get; set; }
+
+
+    protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides
+
+    {
+
+        Console.WriteLine("kalder api/vagt");
+
+        EditContext = new EditContext(VagtToUpdate); 
+
+        LedigeVagter = (await VagtService.GetAllVagter()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.
+
+    }
+
+    public void showTagVagtSection(VagtView selectedvagt) 
+
+    { 
+
+        this.TagVagtSectionVisible = true; 
+
+        VagtToUpdate = new Vagt(); 
+
+        VagtToUpdate.VagtID = selectedvagt.VagtID; 
+
+        VagtToUpdate.OpgaveID = selectedvagt.OpgaveID; 
+
+        VagtToUpdate.StartTid = selectedvagt.StartTid; 
+
+        VagtToUpdate.SlutTid = selectedvagt.SlutTid; 
+
+        VagtToUpdate.Dato = selectedvagt.Dato; 
+
+        VagtToUpdate.VagtType = selectedvagt.Type; 
+
+    } 
+
+    public async Task UpdateVagt(Vagt item) 
+
+    { 
+
+        TagVagtSectionVisible = false; 
+
+        IDSelected = item.VagtID; 
+        
+        ErrorCode = (await VagtService.UpdateVagt(item)); 
+
+  
+
+        Console.WriteLine($"Id seletected to update {IDSelected}, responsecode: {ErrorCode} "); 
+
+  
+
+        if (ErrorCode == (int)HttpStatusCode.OK) 
+  
+        { 
+  
+            LedigeVagter = (await VagtService.GetAllVagter()).ToList(); 
+  
+        } 
+    } 
+
+
+   } 

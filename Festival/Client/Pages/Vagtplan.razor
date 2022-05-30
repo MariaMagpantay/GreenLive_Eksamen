@@ -1,0 +1,96 @@
+﻿@using Festival.Client.Service
+@using Festival.Shared.Models
+@using Festival.Shared.Views;
+@using System.Net
+@using System.Diagnostics
+@page "/vagtplan"
+
+<PageTitle>Vagt Plan</PageTitle>
+
+<h3>Vagt Plan</h3>
+
+<table class="table">
+
+    <tr>
+        <th>Vagt ID</th>
+        <th>Start Tid</th>
+        <th>Slut Tid</th>
+        <th>Vagt Type</th>
+        <th>Opgave Navn</th>
+        <th>Opgave Beskrivelse</th>
+        <th>Person ID</th>
+        <th>Frivillig Navn</th>
+        <th>Status</th>
+    </tr>
+
+    @foreach (var item in BesatteVagter) //loop
+    {
+        <tr>
+            @if (@item.PersonID < 1)
+            {
+                <td></td>
+            }
+            else
+            {
+                <td>@item.VagtID</td>
+                <td>@item.StartTid</td>
+                <td>@item.SlutTid</td>
+                <td>@item.Type</td>
+                <td>@item.OpgaveNavn</td>
+                <td>@item.Beskrivelse</td>
+                <td>@item.PersonID</td>
+                <td>@item.Navn</td>
+                <td>
+                   @* <EditForm EditContext="@EditContext" class="row p-3">
+                        <div class="col-md-6 mb-3">
+                            <InputSelect id="Status" @bind-Value="@item.Status" class="form-control" 
+                                        @onchange="(item) => StatusSelect(item)">
+                                @foreach (var item in StatusValg)
+                                {
+                            <option value="@item">@item</option>
+                                }
+                            </InputSelect>
+                        </div>
+                     </EditForm>*@
+                </td>
+            }
+
+        </tr>
+
+    }
+
+</table>
+
+
+
+@code {
+
+    [Inject]
+    public IVagtService VagtService { get; set; }
+
+    private List<VagtView> BesatteVagter = new List<VagtView>();
+    private int ErrorCode { get; set; } = 0;
+    private Vagt VagtStatus = new Vagt();
+    private EditContext EditContext;
+    private String[] StatusValg = { "Planlagt", "Igangværende", "Udført" };
+
+    protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides
+    {
+        Console.WriteLine("kalder api/vagt");
+        BesatteVagter = (await VagtService.GetAllVagter()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.
+       // EditContext = new EditContext(VagtStatus);
+       // VagtStatus.Status = StatusValg[0];
+    }
+
+    //private async Task StatusSelect(VagtView changed)
+    //{
+    //    // status.Status = VagtStatus.Status;
+    //    var chgVagt = new Vagt();
+    //    //{
+    //        //   // VagtID = changed.VagtID,
+    //        //   // OpgaveID = changed.OpgaveID,
+    //        //    //Status = changed.Status
+    //        //};
+    //    ErrorCode  = await VagtService.UpdateVagtStatus(chgVagt);
+    //}
+   } 

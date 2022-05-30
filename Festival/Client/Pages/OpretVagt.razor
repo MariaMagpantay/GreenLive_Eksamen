@@ -1,0 +1,157 @@
+﻿@using Festival.Client.Service
+
+@using Festival.Shared.Models
+
+@using Festival.Shared.Views;
+
+@using System.Net
+
+@using System.Diagnostics
+
+@page "/opretvagt"
+
+<PageTitle>Opret Vagt</PageTitle>
+
+<h3>Opret Vagt</h3>
+
+<EditForm EditContext="@EditContext" class="row p-3">
+
+    <h3>Indtast informationer om Vagt</h3>
+    <!-- opgave_id - int -->
+    <div class="col-md-6 mb-3">
+        <label for="Opgave">Vælg typen af opgave</label>
+        <InputSelect id="Opgave" @bind-Value="newOpgave.OpgaveID" class="form-control">
+            @foreach (var item in OpgaveValg)
+            {
+                <option value="@item.OpgaveID">@item.OpgaveNavn</option>
+            }
+        </InputSelect>
+    </div>
+    <!-- start_tid - timestamp -->
+    <div class="col-md-6 mb-3">
+
+        <label for="StartTid">Indtast vagtens start tid</label>
+
+        <input type="time" id="StartTid" @bind="newVagt.StartTid" bind:format="HH:mm" class="form-control" />
+
+    </div>
+    <!-- slut_tid - timestamp -->
+    <div class="col-md-6 mb-3">
+
+        <label for="SlutTid">Indtast vagtens slut tid</label>
+
+        <input type="time" id="SlutTid" @bind="newVagt.SlutTid" bind:format="HH:mm" class="form-control" />
+
+    </div>
+    <!-- dato - date-->
+    <div class="col-md-6 mb-3">
+
+        <label for="Dato">Indtast dato for vagten</label>
+
+        <InputDate id="Dato" @bind-Value="newVagt.Dato" class="form-control" />
+
+    </div>
+    <!-- person_id - int -->
+    <!-- type - string -->
+    <div class="col-md-6 mb-3">
+
+        <label for="VagtType">Indtast typen af vagt</label>
+
+        <InputText id="VagtType" @bind-Value="newVagt.VagtType" class="form-control" />
+
+    </div>
+    <!-- Button-->
+    <button type="submit" class="btn btn-success" @onclick="NyVagt">Opret</button>
+    <br />
+    <div id="errorCode">
+
+        <b>Code: @ErrorCode</b>
+
+        <br />
+
+        <b>Meddelelse: </b><label style="color: green"><b>@Meddelelse</b></label>
+
+    </div>
+
+</EditForm>
+
+
+
+
+
+@code {
+
+    [Inject]
+    public IVagtService VagtService { get; set; }
+
+    [Inject]
+    public IOpgaveService OpgaveService { get; set; }
+
+    Vagt newVagt = new Vagt();
+    Opgaver newOpgave = new Opgaver();
+    private List<Vagt> VagtListe = new List<Vagt>();
+
+    private int[] opgaveValg = { 1, 2, 3 };
+    private Opgaver[] OpgaveValg = { };
+
+    private EditContext EditContext;
+
+    private int ErrorCode { get; set; } = 0;
+
+    private string Meddelelse { get; set; } = "";
+
+
+    protected async override void OnInitialized()
+
+    {
+        EditContext = new EditContext(newVagt);
+
+        newVagt.OpgaveID = opgaveValg[0];
+        OpgaveValg = (await OpgaveService.GetAllOpgaver());
+    }
+
+
+    private async Task NyVagt()
+
+    {
+        Console.WriteLine("on submit vagt called");
+
+        ErrorCode = await VagtService.AddVagt(newVagt);
+        newVagt.OpgaveID = opgaveValg[0];
+        Console.WriteLine("Vagt added: return code: " + ErrorCode);
+
+        if (ErrorCode == 200)
+
+        {
+
+            Meddelelse = "Din vagt er blevet oprettet!";
+
+            Vagt newVagt = new Vagt();
+
+            EditContext = new EditContext(newVagt);
+
+        }
+
+    }
+
+
+
+    //US 5 - Crud på opgaver og vagter(her kan vi nøjes med Create og Read da vi har fuld crud på person)
+
+    //http post i "opret vagt" editform
+
+    //US 6 - markere status på opgave(vagt)
+
+    //ved dropdown med de 3 muligheder -> input select
+
+    //US 3 - som frivillig skal jeg kunne vælge tilgængelige vagter
+
+    //Read på de oprettede vagter
+
+    //
+
+    //US10 - laves med et join -> view. associationstabllen pers_komp på fysisk model
+
+    // uskrives som liste i et loop
+
+}

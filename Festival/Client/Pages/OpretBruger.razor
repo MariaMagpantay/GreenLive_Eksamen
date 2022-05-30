@@ -1,0 +1,150 @@
+﻿@using Festival.Client.Service
+@using Festival.Shared.Models
+@using Festival.Shared.Views;
+@using System.Net
+@using System.Diagnostics
+@using System.Linq;
+@using System.Collections.Generic;
+@page "/opretbruger"
+
+<PageTitle>Opret Bruger</PageTitle>
+
+<h3>Opret en bruger</h3>
+
+<EditForm EditContext="@EditContext" class="row p-3">
+
+    <h3>Indtast dine oplysninger</h3>
+    <div class="col-md-6 mb-3">
+        <label for="PersonNavn">Indtast dit fulde navn</label>
+        <InputText id="PersonNavn" @bind-Value="newPerson.PersonNavn" class="form-control" />
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label for="PersonEmail">Indtast din email</label>
+        <InputText id="PersonEmail" @bind-Value="newPerson.PersonEmail" class="form-control" />
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label for="PersonTlf">Indtast dit telefonnummer</label>
+        <InputText id="PersonTlf" @bind-Value="newPerson.PersonTlf" class="form-control" />
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label for="PersonFoedselsdato">Indtast din fødselsdato</label>
+        <InputDate id="PersonFoedselsdato" @bind-Value="newPerson.PersonFoedselsdato" class="form-control" />
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label for="Rollen">Vælg din stilling</label>
+        <InputSelect id="Rolle" @bind-Value="newRolle.RolleID" class="form-control">
+            @foreach (var item in RolleValg)
+            {
+                <option value="@item.RolleID">@item.Rolle</option>
+            }
+        </InputSelect>
+    </div>
+
+
+
+    <button type="submit" class="btn btn-success" @onclick="OpretPerson">Opret</button>
+    <br />
+    <div id="errorCode">
+        <b>Code: @ErrorCode</b>
+        <br />
+        <b>Meddelelse: </b><label style="color: green"><b>@MedPer</b></label>
+        <h3>Tilføj Kompetencer</h3>
+    </div>
+</EditForm>
+
+<EditForm EditContext="@EditContext" class="row p-3">
+
+    <div class="col-md-6 mb-3">
+        <label for="Personensid">Indtast dit Person ID</label>
+        <InputNumber id="Personensid" @bind-Value="newKompetence.PersonID" class="form-control" />
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label for="Kompetence">Indsæt en kompetence</label>
+        <InputSelect id="Kompetence" @bind-Value="newKompetence.KompetenceID" class="form-control">
+            @foreach (var item in KompetenceValg)
+            {
+                <option value="@item.KompetenceID">@item.Type</option>
+            }
+
+
+
+        </InputSelect>
+    </div>
+    <button type="submit" class="btn btn-success" @onclick="OpretKompetence">Tilføj en kompetence</button>
+    <br />
+    <b>Meddelelse: </b><label style="color: green"><b>@MedKomp</b></label>
+</EditForm>
+
+@code {
+    [Inject]
+    public IPersonService PersonService { get; set; }
+    [Inject]
+    public IKompetenceService KompetenceService { get; set; }
+    [Inject]
+    public IRolleService RolleService { get; set; }
+
+    Person newPerson = new Person();
+    Perskomp newKompetence = new Perskomp();
+    RolleType newRolle = new RolleType();
+    private List<Person> PersonListe = new List<Person>();
+    private int[] rolleValg = { 1, 2 };
+    private RolleType[] RolleValg = { };
+    private int[] kompetenceValg = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    private Kompetence[] KompetenceValg = { };
+
+    private EditContext EditContext;
+    private int ErrorCode { get; set; } = 0;
+    private string MedPer { get; set; } = "";
+    private string MedKomp { get; set; } = "";
+
+    protected async override Task OnInitializedAsync()
+    {
+        EditContext = new EditContext(newPerson);
+
+        newPerson.RolleID = rolleValg[0];
+        newKompetence.KompetenceID = kompetenceValg[0];
+        RolleValg = (await RolleService.GetAllRoller());
+        KompetenceValg = (await KompetenceService.GetAllKompetencer());
+    }
+
+
+    private async Task OpretPerson()
+    {
+        Console.WriteLine("on submit person called");
+
+        int NewPersonID;
+        (ErrorCode, NewPersonID) = await PersonService.AddPerson(newPerson);
+        newPerson.RolleID = rolleValg[0];
+
+        Console.WriteLine("Person added: return code: " + ErrorCode);
+        if (ErrorCode == 200)
+        {
+            MedPer = "Din bruger er hermed oprettet med id: " + NewPersonID;
+            newKompetence.PersonID = NewPersonID;
+            Person newPerson = new Person();
+
+            EditContext = new EditContext(newPerson);
+        }
+
+    }
+    private async Task OpretKompetence()
+    {
+        Console.WriteLine("on submit Perskomp called");
+        ErrorCode = await KompetenceService.AddKompetence(newKompetence);
+        newKompetence.KompetenceID = kompetenceValg[0];
+        Console.WriteLine("Kompetence added: return code: " + ErrorCode);
+        if (ErrorCode == 200)
+        {
+            MedKomp = "Din Kompetence er hermed tilføjet! Hvis du har flere, så tilføj blot igen";
+            Perskomp newKompetence = new Perskomp();
+            EditContext = new EditContext(newKompetence);
+        }
+
+    }
+
+}
