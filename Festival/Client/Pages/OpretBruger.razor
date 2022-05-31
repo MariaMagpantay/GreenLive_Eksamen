@@ -70,9 +70,6 @@
             {
                 <option value="@item.KompetenceID">@item.Type</option>
             }
-
-
-
         </InputSelect>
     </div>
     <button type="submit" class="btn btn-success" @onclick="OpretKompetence">Tilføj en kompetence</button>
@@ -127,7 +124,6 @@
             MedPer = "Din bruger er hermed oprettet med id: " + NewPersonID;
             newKompetence.PersonID = NewPersonID;
             Person newPerson = new Person();
-
             EditContext = new EditContext(newPerson);
         }
 

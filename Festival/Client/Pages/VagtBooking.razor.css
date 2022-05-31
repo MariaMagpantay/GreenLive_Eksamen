@@ -1,0 +1,13 @@
+﻿h3 {
+    color: deeppink;
+}
+th {
+    text-align: center;
+}
+td{
+    border-style: solid;
+    border-color: black;
+    border-width: thin;
+    padding: 1vh;
+    text-align: center;
+}

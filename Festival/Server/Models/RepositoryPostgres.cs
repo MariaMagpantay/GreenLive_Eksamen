@@ -286,7 +286,7 @@ namespace Festival.Server.Models
 
 
 
-            var sql = "SELECT vagt_id as vagtid, start_tid as starttid, slut_tid as sluttid, dato, type, opgave_id as opgaveid, opgave_navn as opgavenavn, beskrivelse, person_id as personid, navn FROM o_v as opgavevagter";
+            var sql = "SELECT vagt_id as vagtid, start_tid as starttid, slut_tid as sluttid, dato, type, status, opgave_id as opgaveid, opgave_navn as opgavenavn, beskrivelse, person_id as personid, navn FROM v_v as opgavevagter";
 
 
 
@@ -305,69 +305,29 @@ namespace Festival.Server.Models
 
 
         public void AddVagt(Vagt newVagt)
-
-
-
         {
 
             //console test  
-
-
-
             Console.WriteLine("add vagt repository");
-
-
 
             var parameters = new DynamicParameters(); //Opretter en dictionary  
 
-
-
             parameters.Add("OpgaveID", newVagt.OpgaveID); //Tilføjer felter til dicionary  
-
-
 
             parameters.Add("StartTid", newVagt.StartTid);
 
-
-
             parameters.Add("SlutTid", newVagt.SlutTid);
-
-
 
             parameters.Add("Dato", newVagt.Dato);
 
-
-
             parameters.Add("PersonID", newVagt.PersonID);
-
-
 
             parameters.Add("VagtType", newVagt.VagtType);
 
-
-
-
-
-            //sql statement  
-
-
-
+            //sql statement 
             var sql = "INSERT INTO vagter (opgave_id, start_tid, slut_tid, dato, type)" + "VALUES (@OpgaveID, @StartTid, @SlutTid, @Dato, @VagtType)";
-
-
-
-
-
-
-
             db.connection.Query(sql, parameters);
-
-
-
             Console.WriteLine("vagt er oprettet");
-
-
-
         }
 
         public bool UpdateVagt(Vagt item)
@@ -479,7 +439,7 @@ namespace Festival.Server.Models
 
             Console.WriteLine("get all opgaver repository");
 
-            var sql = "SELECT opgave_id as opgaveid, opgave_navn as opgavenavn, beskrivelse FROM opgaver";
+            var sql = "SELECT opgave_id as opgaveid, opgave_navn as opgavenavn, beskrivelse, kategori_id as kategoriid FROM opgaver";
 
             var result = db.connection.Query<Opgaver>(sql);
 

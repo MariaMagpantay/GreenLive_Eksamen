@@ -15,6 +15,7 @@
         <th>Vagt ID</th>
         <th>Start Tid</th>
         <th>Slut Tid</th>
+        <th>Dato</th>
         <th>Vagt Type</th>
         <th>Opgave Navn</th>
         <th>Opgave Beskrivelse</th>
@@ -28,18 +29,19 @@
         <tr>
             @if (@item.PersonID < 1)
             {
-                <td></td>
             }
             else
             {
                 <td>@item.VagtID</td>
-                <td>@item.StartTid</td>
-                <td>@item.SlutTid</td>
+                <td>@item.StartTid.Hour:@item.StartTid.Minute</td>
+                <td>@item.SlutTid.Hour:@item.SlutTid.Minute</td>
+                <td>@item.Dato.Day/@item.Dato.Month</td>
                 <td>@item.Type</td>
                 <td>@item.OpgaveNavn</td>
                 <td>@item.Beskrivelse</td>
                 <td>@item.PersonID</td>
                 <td>@item.Navn</td>
+                <td>@item.Status</td>
                 <td>
                    @* <EditForm EditContext="@EditContext" class="row p-3">
                         <div class="col-md-6 mb-3">

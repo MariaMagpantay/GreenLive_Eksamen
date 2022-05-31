@@ -8,7 +8,7 @@
 
 <PageTitle>Vagt Booking</PageTitle>
 
-
+<h3>Book Vagter</h3>
 <table class="table">
 
     <tr>
@@ -39,11 +39,11 @@
             {
                 <td>@item.VagtID</td>
 
-                <td>@item.StartTid.Hour</td>
+                <td>@item.StartTid.Hour:@item.StartTid.Minute</td>
 
-                <td>@item.SlutTid.Hour</td>
+                <td>@item.SlutTid.Hour:@item.SlutTid.Minute</td>
 
-                <td>@item.Dato.Date</td>
+                <td>@item.Dato.Day/@item.Dato.Month</td>
 
                 <td>@item.Type</td>
 
@@ -55,7 +55,6 @@
             }
             else
             {
-                <td></td>
             }
         </tr>
     }

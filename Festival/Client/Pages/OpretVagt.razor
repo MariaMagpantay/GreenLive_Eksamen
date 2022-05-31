@@ -17,16 +17,6 @@
 <EditForm EditContext="@EditContext" class="row p-3">
 
     <h3>Indtast informationer om Vagt</h3>
-    <!-- opgave_id - int -->
-    <div class="col-md-6 mb-3">
-        <label for="Opgave">Vælg typen af opgave</label>
-        <InputSelect id="Opgave" @bind-Value="newOpgave.OpgaveID" class="form-control">
-            @foreach (var item in OpgaveValg)
-            {
-                <option value="@item.OpgaveID">@item.OpgaveNavn</option>
-            }
-        </InputSelect>
-    </div>
     <!-- start_tid - timestamp -->
     <div class="col-md-6 mb-3">
 
@@ -44,14 +34,23 @@
 
     </div>
     <!-- dato - date-->
-    <div class="col-md-6 mb-3">
+    <div class="col-md-12 mb-3">
 
         <label for="Dato">Indtast dato for vagten</label>
 
         <InputDate id="Dato" @bind-Value="newVagt.Dato" class="form-control" />
 
     </div>
-    <!-- person_id - int -->
+    <!-- opgave_id - int -->
+    <div class="col-md-6 mb-3">
+        <label for="Opgave">Vælg typen af opgave</label>
+        <InputSelect id="Opgave" @bind-Value="newOpgave.OpgaveID" class="form-control">
+            @foreach (var item in OpgaveValg)
+            {
+                <option value="@item.OpgaveID">@item.OpgaveNavn</option>
+            }
+        </InputSelect>
+    </div>
     <!-- type - string -->
     <div class="col-md-6 mb-3">
 
@@ -83,21 +82,17 @@
 
     [Inject]
     public IVagtService VagtService { get; set; }
-
     [Inject]
     public IOpgaveService OpgaveService { get; set; }
 
     Vagt newVagt = new Vagt();
     Opgaver newOpgave = new Opgaver();
     private List<Vagt> VagtListe = new List<Vagt>();
-
     private int[] opgaveValg = { 1, 2, 3 };
     private Opgaver[] OpgaveValg = { };
 
     private EditContext EditContext;
-
     private int ErrorCode { get; set; } = 0;
-
     private string Meddelelse { get; set; } = "";
 
 
@@ -121,17 +116,11 @@
         Console.WriteLine("Vagt added: return code: " + ErrorCode);
 
         if (ErrorCode == 200)
-
         {
-
-            Meddelelse = "Din vagt er blevet oprettet!";
-
+            Meddelelse = "Din vagt er blevet oprettet!";         
             Vagt newVagt = new Vagt();
-
             EditContext = new EditContext(newVagt);
-
         }
-
     }
 
 
