@@ -60,8 +60,8 @@
 
             <td>@RolleTitel[item.RolleID]</td>
 
-            <td><button style="background-color:red" type="button" @onclick="() => OnDeletePerson(item)">Slet</button></td>
-            <td><button style="background-color:yellow" type="button" @onclick="() => ShowEditSection(item.PersonID)">Ret</button></td>
+            <td id="KnapSlet"><button style="background-color:red" type="button" @onclick="() => OnDeletePerson(item)">Slet</button></td>
+            <td id="KnapRet"><button style="background-color:yellow" type="button" @onclick="() => ShowEditSection(item.PersonID)">Ret</button></td>
 
         </tr>
 

@@ -15,17 +15,17 @@
 
         <th>Vagt ID</th>
 
-        <th>Start Tid</th>
+        <th>Vagtstart</th>
 
-        <th>Slut Tid</th>
+        <th>Vagtslut</th>
 
         <th>Dato</th>
 
-        <th>Vagt Type</th>
+        <th>Vagttype</th>
 
-        <th>Opgave Navn</th>
+        <th>Opgavenavn</th>
 
-        <th>Opgave Beskrivelse</th>
+        <th>Opgavebeskrivelse</th>
 
 
     </tr>
@@ -51,7 +51,7 @@
 
                 <td>@item.Beskrivelse</td>
 
-                <td><button style="background-color:darkblue" type="button" @onclick="() => showTagVagtSection(item)">Tag Vagt</button></td> 
+                <td id="KnapTagVagt"><button style="background-color:darkblue" type="button" @onclick="() => showTagVagtSection(item)">Tag Vagt</button></td>
             }
             else
             {
@@ -59,23 +59,23 @@
         </tr>
     }
 </table>
-<div style="@(TagVagtSectionVisible ? "display:block" : "display:none")"> 
+<div style="@(TagVagtSectionVisible ? "display:block" : "display:none")">
 
-    <EditForm EditContext="@EditContext" class="row p-3"> 
+    <EditForm EditContext="@EditContext" class="row p-3">
 
-        <div class="col-md-6 mb-3"> 
+        <div class="col-md-6 mb-3">
 
-            <label for="Personid">Indtast dit person ID</label> 
+            <label for="Personid">Indtast dit person ID</label>
 
-            <InputNumber id="PersonID" @bind-Value="VagtToUpdate.PersonID" class="form-control" /> 
+            <InputNumber id="PersonID" @bind-Value="VagtToUpdate.PersonID" class="form-control" />
 
-        </div> 
+        </div>
 
-    </EditForm> 
+    </EditForm>
 
-    <button style="background-color:yellow" type="button" @onclick="() => UpdateVagt(VagtToUpdate)">Godkend Vagt</button> 
+    <button style="background-color:yellow" type="button" @onclick="() => UpdateVagt(VagtToUpdate)">Godkend Vagt</button>
 
-</div> 
+</div>
 
 
 
@@ -88,13 +88,13 @@
 
     private List<VagtView> LedigeVagter = new List<VagtView>();
 
-    Vagt VagtToUpdate = new Vagt(); 
+    Vagt VagtToUpdate = new Vagt();
 
-    private EditContext EditContext; 
+    private EditContext EditContext;
 
     private int ErrorCode { get; set; } = 0;
 
-    private bool TagVagtSectionVisible = false; 
+    private bool TagVagtSectionVisible = false;
 
     private int IDSelected { get; set; }
 
@@ -105,58 +105,58 @@
 
         Console.WriteLine("kalder api/vagt");
 
-        EditContext = new EditContext(VagtToUpdate); 
+        EditContext = new EditContext(VagtToUpdate);
 
         LedigeVagter = (await VagtService.GetAllVagter()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.
 
     }
 
-    public void showTagVagtSection(VagtView selectedvagt) 
+    public void showTagVagtSection(VagtView selectedvagt)
 
-    { 
+    {
 
-        this.TagVagtSectionVisible = true; 
+        this.TagVagtSectionVisible = true;
 
-        VagtToUpdate = new Vagt(); 
+        VagtToUpdate = new Vagt();
 
-        VagtToUpdate.VagtID = selectedvagt.VagtID; 
+        VagtToUpdate.VagtID = selectedvagt.VagtID;
 
-        VagtToUpdate.OpgaveID = selectedvagt.OpgaveID; 
+        VagtToUpdate.OpgaveID = selectedvagt.OpgaveID;
 
-        VagtToUpdate.StartTid = selectedvagt.StartTid; 
+        VagtToUpdate.StartTid = selectedvagt.StartTid;
 
-        VagtToUpdate.SlutTid = selectedvagt.SlutTid; 
+        VagtToUpdate.SlutTid = selectedvagt.SlutTid;
 
-        VagtToUpdate.Dato = selectedvagt.Dato; 
+        VagtToUpdate.Dato = selectedvagt.Dato;
 
-        VagtToUpdate.VagtType = selectedvagt.Type; 
+        VagtToUpdate.VagtType = selectedvagt.Type;
 
-    } 
+    }
 
-    public async Task UpdateVagt(Vagt item) 
+    public async Task UpdateVagt(Vagt item)
 
-    { 
+    {
 
-        TagVagtSectionVisible = false; 
+        TagVagtSectionVisible = false;
 
-        IDSelected = item.VagtID; 
-        
-        ErrorCode = (await VagtService.UpdateVagt(item)); 
+        IDSelected = item.VagtID;
 
-  
+        ErrorCode = (await VagtService.UpdateVagt(item));
 
-        Console.WriteLine($"Id seletected to update {IDSelected}, responsecode: {ErrorCode} "); 
 
-  
 
-        if (ErrorCode == (int)HttpStatusCode.OK) 
-  
-        { 
-  
-            LedigeVagter = (await VagtService.GetAllVagter()).ToList(); 
-  
-        } 
-    } 
+        Console.WriteLine($"Id seletected to update {IDSelected}, responsecode: {ErrorCode} ");
+
+
+
+        if (ErrorCode == (int)HttpStatusCode.OK)
+
+        {
+
+            LedigeVagter = (await VagtService.GetAllVagter()).ToList();
+
+        }
+    }
 
 
    } 

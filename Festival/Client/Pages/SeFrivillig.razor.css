@@ -1,12 +1,9 @@
 ﻿h3 {
-    color: darkgreen;
-    font-family: monospace;
+    color: deeppink;
 }
 
 th {
     text-align: center;
-    color: darkgreen;
-    font-family: monospace;
 }
 
 td {
@@ -15,8 +12,4 @@ td {
     border-width: thin;
     padding: 1vh;
     text-align: center;
-}
-
-#KnapTagVagt {
-    border-style: none;
 }
