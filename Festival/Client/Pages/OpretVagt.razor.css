@@ -6,3 +6,11 @@
 b {
     color: darkgreen;
 }
+
+button {
+    color: floralwhite;
+    font-weight: bold;
+    border-radius: 1vh;
+    border-width: 2px;
+    border-color: floralwhite;
+}

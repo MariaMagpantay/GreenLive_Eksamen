@@ -9,6 +9,10 @@ th {
     border: none;
 }
 
+tr:nth-child(even) {
+    background-color: #F0F0C0;
+}
+
 #titler {
     padding-top: 12px;
     padding-bottom: 12px;

@@ -9,6 +9,23 @@
 <PageTitle>Vagt Booking</PageTitle>
 
 <h3>Book Vagter</h3>
+<div style="@(TagVagtSectionVisible ? "display:block" : "display:none")">
+
+    <EditForm EditContext="@EditContext" class="row p-3">
+
+        <div class="col-md-6 mb-3">
+
+            <label for="Personid">Indtast dit person ID</label>
+
+            <InputNumber id="PersonID" @bind-Value="VagtToUpdate.PersonID" class="form-control" />
+
+        </div>
+
+    </EditForm>
+
+    <button style="background-color:#198725" type="button" @onclick="() => UpdateVagt(VagtToUpdate)">Godkend Vagt</button>
+
+</div>
 <table class="table">
 
     <tr id="titler">
@@ -59,23 +76,7 @@
         </tr>
     }
 </table>
-<div style="@(TagVagtSectionVisible ? "display:block" : "display:none")">
 
-    <EditForm EditContext="@EditContext" class="row p-3">
-
-        <div class="col-md-6 mb-3">
-
-            <label for="Personid">Indtast dit person ID</label>
-
-            <InputNumber id="PersonID" @bind-Value="VagtToUpdate.PersonID" class="form-control" />
-
-        </div>
-
-    </EditForm>
-
-    <button style="background-color:yellow" type="button" @onclick="() => UpdateVagt(VagtToUpdate)">Godkend Vagt</button>
-
-</div>
 
 
 
