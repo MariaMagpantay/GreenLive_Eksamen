@@ -1,6 +1,6 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">Festival</a>
+        <a class="navbar-brand" style="font-weight:bold" href="">GreenLive</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -9,6 +9,19 @@
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="opretbruger">
+                <span class="oi oi-account-login" aria-hidden="true"></span> Opret Bruger
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="brugeroversigt">
+                <span class="oi oi-people" aria-hidden="true"></span> Bruger Oversigt
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <label style="color: #383838" for="Frivillig"><span class="oi oi-person" aria-hidden="true"></span>Frivillig</label>
+        </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="vagtbooking">
                 <span class="oi oi-task" aria-hidden="true"></span> Vagt Booking
@@ -21,24 +34,19 @@
         </div>
 
         <div class="nav-item px-3">
-            <label style="color: gray" for="Koordinator"><span class="oi oi-person" aria-hidden="true"></span>Koordinator</label>
+            <label style="color: #383838" for="Koordinator"><span class="oi oi-person" aria-hidden="true"></span>Koordinator</label>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="opretvagt">Opret Vagt</NavLink>
+            <NavLink class="nav-link" href="opretvagt"><span class="oi oi-clipboard" aria-hidden="true"></span>Opret Vagt</NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="sefrivillig">Se Frivillig</NavLink>
+            <NavLink class="nav-link" href="vagtstatus"><span class="oi oi-clock" aria-hidden="true"></span>Vagt Status</NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="brugeroversigt">
-                <span class="oi oi-people" aria-hidden="true"></span> Bruger Oversigt
-            </NavLink>
+            <NavLink class="nav-link" href="sefrivillig"><span class="oi oi-spreadsheet" aria-hidden="true"></span>Se Frivillig</NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="opretbruger">
-                <span class="oi oi-account-login" aria-hidden="true"></span> Opret Bruger
-            </NavLink>
-        </div>
+
+
     </nav>
 </div>
 

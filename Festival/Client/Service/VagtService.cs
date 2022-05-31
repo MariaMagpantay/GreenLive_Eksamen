@@ -38,12 +38,6 @@ namespace Festival.Client.Service
             return (int)responseStatusCode;
         }
 
-        public async Task<int> UpdateVagtStatus(Vagt status)
-        {
-            var response = await httpClient.PutAsJsonAsync("api/vagt", status);
-            var responseStatusCode = response.StatusCode;
-            return (int)responseStatusCode;
-        }
 
     }
 

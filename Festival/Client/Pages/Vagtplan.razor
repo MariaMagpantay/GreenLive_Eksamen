@@ -21,7 +21,6 @@
         <th>Opgave Beskrivelse</th>
         <th>Person ID</th>
         <th>Frivillig Navn</th>
-        <th>Status</th>
     </tr>
 
     @foreach (var item in BesatteVagter) //loop
@@ -41,20 +40,6 @@
                 <td>@item.Beskrivelse</td>
                 <td>@item.PersonID</td>
                 <td>@item.Navn</td>
-                <td>@item.Status</td>
-                <td>
-                    @* <EditForm EditContext="@EditContext" class="row p-3">
-            <div class="col-md-6 mb-3">
-            <InputSelect id="Status" @bind-Value="@item.Status" class="form-control"
-            @onchange="(item) => StatusSelect(item)">
-            @foreach (var item in StatusValg)
-            {
-            <option value="@item">@item</option>
-            }
-            </InputSelect>
-            </div>
-            </EditForm>*@
-                </td>
             }
 
         </tr>

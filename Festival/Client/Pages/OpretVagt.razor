@@ -44,7 +44,7 @@
     <!-- opgave_id - int -->
     <div class="col-md-6 mb-3">
         <label for="Opgave">Vælg typen af opgave</label>
-        <InputSelect id="Opgave" @bind-Value="newOpgave.OpgaveID" class="form-control">
+        <InputSelect id="Opgave" @bind-Value="newOpgave.OpgaveNavn" class="form-control">
             @foreach (var item in OpgaveValg)
             {
                 <option value="@item.OpgaveID">@item.OpgaveNavn</option>

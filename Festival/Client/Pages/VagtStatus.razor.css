@@ -1,0 +1,34 @@
+﻿h3 {
+    color: darkgreen;
+    font-family: monospace;
+}
+
+th {
+    text-align: center;
+    font-family: monospace;
+}
+
+#KnapTagVagt {
+    background-color: white;
+    border: none;
+}
+
+tr:nth-child(even) {
+    background-color: #F0F0C0;
+}
+
+#titler {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #116300;
+    color: white;
+}
+
+td {
+    border-style: solid;
+    border-color: black;
+    border-width: thin;
+    padding: 1vh;
+    text-align: center;
+}

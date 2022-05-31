@@ -118,7 +118,7 @@ namespace Festival.Server.Models
         public List<VagtView> GetAllVagter()
         {
             Console.WriteLine("get all in vagt view repository");
-            var sql = "SELECT vagt_id as vagtid, start_tid as starttid, slut_tid as sluttid, dato, type, status, opgave_id as opgaveid, opgave_navn as opgavenavn, beskrivelse, person_id as personid, navn FROM v_v as opgavevagter";
+            var sql = "SELECT vagt_id as vagtid, start_tid as starttid, slut_tid as sluttid, dato, type, status, opgave_id as opgaveid, opgave_navn as opgavenavn, beskrivelse, person_id as personid, navn FROM v_v as opgavevagter ORDER BY vagt_id ASC";
             var personer = db.connection.Query<VagtView>(sql);
             return personer.ToList();
         }
@@ -156,22 +156,13 @@ namespace Festival.Server.Models
                 return true;
             }
             else
+            {
                 return false;
+            }
+
         }
 
-        public bool UpdateVagtStatus(Vagt status)
-        {
-            var sql = $"UPDATE vagt SET status = {status.Status} WHERE vagt_id = {status.VagtID}";
-            var vagtExists = ExistsVagtWithID(status.PersonID);
-            if (vagtExists)
-            {
-                db.connection.Query(sql);
-                return true;
-            }
-            else
-                return false;
-            Console.WriteLine("vagtstatus er opdateret");
-        }
+
 
         private bool ExistsVagtWithID(int? id)//Hjælpemetode til UpdateVagt og UpdateVagtStatus
         {
@@ -226,11 +217,26 @@ namespace Festival.Server.Models
             return result.ToList();
         }
 
-
-
-
-
-
+        // Til Status controller
+        public bool UpdateVagtStatus(Vagt status)
+        {
+            Console.WriteLine("update vagt repository på status");
+            var parameters = new DynamicParameters(); //Opretter en dictionary 
+            parameters.Add("Status", status.Status); //Tilføjer til dicionary 
+            parameters.Add("VagtID", status.VagtID);
+            var sql = "UPDATE vagter SET status = @Status WHERE vagt_id = @VagtID";
+            var vagtExists = ExistsVagtWithID((int)status.VagtID);
+            if (vagtExists)
+            {
+                db.connection.Execute(sql, parameters);
+                Console.WriteLine("Vagtstatus er opdateret");
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         //tom constructor 
 

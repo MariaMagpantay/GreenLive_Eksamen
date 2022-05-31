@@ -45,8 +45,6 @@ namespace Festival.Shared.Views
 
         [Required]
         public string Navn { get; set; }
-
-        [Required]
         public string? Status { get; set; }
     }
 

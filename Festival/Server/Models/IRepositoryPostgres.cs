@@ -26,7 +26,7 @@ namespace Festival.Server.Models
         List<VagtView> GetAllVagter(); //metode til at hente alle personer ind i listen
         void AddVagt(Vagt newVagt); //metode til at tilføje en vagt til vores database
         bool UpdateVagt(Vagt item); //metode til at updatere en vagt i databasen
-        bool UpdateVagtStatus(Vagt status); //metode til at updatere en vagtstatus i databasen
+
 
 
 
@@ -42,6 +42,8 @@ namespace Festival.Server.Models
         // Til Opgaver controller
         List<Opgaver> GetAllOpgaver(); //metode til at hente alle opgaver ind i listen
 
+        // Til Status controller
+        bool UpdateVagtStatus(Vagt status); //metode til at updatere en vagtstatus i databasen
 
 
     }

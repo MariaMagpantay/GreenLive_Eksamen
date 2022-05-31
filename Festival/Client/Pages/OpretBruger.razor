@@ -48,10 +48,14 @@
 
     <button type="submit" style="background-color:#198725" class="button" @onclick="OpretPerson">Opret</button>
     <br />
-    <div id="errorCode">
-        <b>Code: @ErrorCode</b>
+    <div>
         <br />
-        <p>Meddelelse: </p><label style="color: green"><b>@MedPer</b></label>
+
+        <p>
+            Meddelelse:
+            <label style="color: green"><b>@MedPer</b></label>
+            <label style="color: red"><b>@MedPerFail</b></label>
+        </p>
         <h3>Tilføj Kompetencer</h3>
     </div>
 </EditForm>
@@ -74,7 +78,11 @@
     </div>
     <button type="submit" style="background-color:#198725" class="button" @onclick="OpretKompetence">Tilføj en kompetence</button>
     <br />
-    <p>Meddelelse: </p><label style="color: green"><b>@MedKomp</b></label>
+    <p>
+        Meddelelse:
+        <label style="color: green"><b>@MedKomp</b></label>
+        <label style="color: red"><b>@MedKompFail</b></label>
+    </p>
 </EditForm>
 
 @code {
@@ -96,8 +104,11 @@
 
     private EditContext EditContext;
     private int ErrorCode { get; set; } = 0;
+    //private string Meddelelse = { get; set; } = "";
     private string MedPer { get; set; } = "";
+    private string MedPerFail { get; set; } = "";
     private string MedKomp { get; set; } = "";
+    private string MedKompFail { get; set; } = "";
 
     protected async override Task OnInitializedAsync()
     {
@@ -126,6 +137,10 @@
             Person newPerson = new Person();
             EditContext = new EditContext(newPerson);
         }
+        else
+        {
+            MedPerFail = "Noget gik galt - Din bruger blev ikke oprettet ";
+        }
 
     }
     private async Task OpretKompetence()
@@ -139,6 +154,10 @@
             MedKomp = "Din Kompetence er hermed tilføjet! Hvis du har flere, så tilføj blot igen";
             Perskomp newKompetence = new Perskomp();
             EditContext = new EditContext(newKompetence);
+        }
+        else
+        {
+            MedKompFail = "Noget gik galt - Din kompetence blev ikke tilføjet til din bruger";
         }
 
     }

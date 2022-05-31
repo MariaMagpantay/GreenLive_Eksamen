@@ -1,0 +1,156 @@
+﻿@using Festival.Client.Service
+@using Festival.Shared.Models
+@using Festival.Shared.Views;
+@using System.Net
+@using System.Diagnostics
+@page "/vagtstatus"
+
+<PageTitle>Vagt Status</PageTitle>
+
+<h3>Vagt Status</h3>
+
+<div style="@(TagVagtSectionVisible ? "display:block" : "display:none")">
+
+    <EditForm EditContext="@EditContext" class="row p-3">
+
+        <div class="col-md-6 mb-3">
+
+            <label for="Status">Vælg status</label>
+
+            <InputSelect id="Status" @bind-Value="StatusVagt.Status" class="form-control">
+
+                @foreach (var item in StatusValg)
+                {
+                    <option value="@item">@item</option>
+                }
+            </InputSelect>
+
+
+        </div>
+
+    </EditForm>
+
+    <button style="background-color:#198725" type="button" @onclick="() => UpdateStatus(StatusVagt)">Godkend Vagt</button>
+    <p>Meddelelse: </p><label style="color: green"><b>@Meddelelse</b></label>
+
+</div>
+<table class="table">
+
+    <tr id="titler">
+        <th>Vagt ID</th>
+        <th>Starttid</th>
+        <th>Sluttid</th>
+        <th>Dato</th>
+        <th>Vagttype</th>
+        <th>Status</th>
+    </tr>
+
+    @foreach (var item in BesatteVagter) //loop
+    {
+        <tr>
+            @if (@item.PersonID < 1)
+            {
+            }
+            else
+            {
+                <td>@item.VagtID</td>
+                <td>@item.StartTid.Hour:@item.StartTid.Minute</td>
+                <td>@item.SlutTid.Hour:@item.SlutTid.Minute</td>
+                <td>@item.Dato.Day/@item.Dato.Month</td>
+                <td>@item.Type</td>
+                <td>@item.Status</td>
+
+                <td id="KnapTagVagt"><button style="background-color:rgb(255,191,0)" type="button" @onclick="() => ShowStatusSelectSection(item)">Opdatér Status</button></td>
+            }
+
+        </tr>
+
+    }
+
+</table>
+
+
+
+@code {
+
+    [Inject]
+    public IVagtService VagtService { get; set; }
+    [Inject]
+    public IStatusService StatusService { get; set; }
+
+    private List<VagtView> BesatteVagter = new List<VagtView>();
+    private int ErrorCode { get; set; } = 0;
+    private Vagt StatusVagt = new Vagt();
+    private EditContext EditContext;
+    private String[] StatusValg = { "Planlagt", "Igangværende", "Udført" };
+    private int IDSelected { get; set; }
+    private bool TagVagtSectionVisible = false;
+    private string Meddelelse { get; set; } = "";
+
+    protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides
+    {
+        Console.WriteLine("kalder api/vagt");
+        StatusVagt.Status = StatusValg[0];
+        EditContext = new EditContext(StatusVagt);
+        BesatteVagter = (await VagtService.GetAllVagter()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.
+                                                                     // EditContext = new EditContext(VagtStatus);
+                                                                     // VagtStatus.Status = StatusValg[0];
+    }
+
+    private async Task ShowStatusSelectSection(VagtView selectedvagt)
+
+    {
+        this.TagVagtSectionVisible = true;
+        StatusVagt = new Vagt();
+        selectedvagt.VagtID = selectedvagt.VagtID;
+
+
+        StatusVagt.VagtID = selectedvagt.VagtID;
+
+        StatusVagt.OpgaveID = selectedvagt.OpgaveID;
+
+        StatusVagt.StartTid = selectedvagt.StartTid;
+
+        StatusVagt.SlutTid = selectedvagt.SlutTid;
+
+        StatusVagt.Dato = selectedvagt.Dato;
+
+        StatusVagt.VagtType = selectedvagt.Type;
+        StatusVagt.Status = selectedvagt.Status;
+
+    }
+    public async Task UpdateStatus(Vagt item)
+
+    {
+
+        TagVagtSectionVisible = false;
+
+        IDSelected = item.VagtID;
+        ErrorCode = (await StatusService.UpdateVagtStatus(item));
+
+        StatusVagt.Status = StatusValg[0];
+
+        Console.WriteLine($"Id seletected to update {IDSelected}, responsecode: {ErrorCode} ");
+
+
+        if (ErrorCode == (int)HttpStatusCode.OK)
+
+        {
+            Meddelelse = "Status for vagten er hermed opdateret!";
+            BesatteVagter = (await VagtService.GetAllVagter()).ToList();
+
+        }
+    }
+
+    //private async Task StatusSelect(VagtView changed)
+    //{
+    //    // status.Status = VagtStatus.Status;
+    //    var chgVagt = new Vagt();
+    //    //{
+    //        //   // VagtID = changed.VagtID,
+    //        //   // OpgaveID = changed.OpgaveID,
+    //        //    //Status = changed.Status
+    //        //};
+    //    ErrorCode  = await VagtService.UpdateVagtStatus(chgVagt);
+    //}
+   } 

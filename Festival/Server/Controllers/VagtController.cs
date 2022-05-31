@@ -25,7 +25,7 @@ namespace Festival.Server.Controllers
 
 
         [HttpGet]
-        public IEnumerable<VagtView>GetAllVagter()
+        public IEnumerable<VagtView> GetAllVagter()
         {
             Console.WriteLine("GetAllVagter kaldes controller");
             return Repository.GetAllVagter();
@@ -43,13 +43,6 @@ namespace Festival.Server.Controllers
         {
             Console.WriteLine("Update vagt called: " + item.ToString());
             Repository.UpdateVagt(item);
-        }
-
-        [HttpPut]
-        public void UpdateVagtStatus(Vagt status)
-        {
-            Console.WriteLine("Update status called: " + status.ToString());
-            Repository.UpdateVagtStatus(status);
         }
     }
 }
