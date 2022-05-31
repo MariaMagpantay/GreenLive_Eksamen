@@ -1,9 +1,20 @@
 ﻿h3 {
-    color: deeppink;
+    color: darkgreen;
+    font-family: monospace;
 }
 
 th {
     text-align: center;
+    font-family: monospace;
+    border: none;
+}
+
+#titler {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #116300;
+    color: white;
 }
 
 td {
@@ -14,10 +25,25 @@ td {
     text-align: center;
 }
 
-#KnapSlet {
+#KnapSlettd {
     border-style: none;
 }
 
-#KnapRet {
+#KnapRettd {
     border-style: none;
+}
+
+#SletKnap {
+    color: floralwhite;
+}
+
+#RetKnap {
+    color: floralwhite;
+}
+
+button {
+    color: floralwhite;
+    border-radius: 1vh;
+    border-width: 2px;
+    border-color: floralwhite;
 }

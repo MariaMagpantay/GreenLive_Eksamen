@@ -11,7 +11,7 @@
 <h3>Book Vagter</h3>
 <table class="table">
 
-    <tr>
+    <tr id="titler">
 
         <th>Vagt ID</th>
 
@@ -51,7 +51,7 @@
 
                 <td>@item.Beskrivelse</td>
 
-                <td id="KnapTagVagt"><button style="background-color:darkblue" type="button" @onclick="() => showTagVagtSection(item)">Tag Vagt</button></td>
+                <td id="KnapTagVagt"><button style="background-color:darkgreen" type="button" @onclick="() => showTagVagtSection(item)">Tag Vagt</button></td>
             }
             else
             {

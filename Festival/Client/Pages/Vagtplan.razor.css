@@ -1,10 +1,22 @@
 ﻿h3 {
-    color: deeppink;
+    color: darkgreen;
+    font-family: monospace;
 }
+
 th {
     text-align: center;
+    font-family: monospace;
 }
-td{
+
+#titler {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #116300;
+    color: white;
+}
+
+td {
     border-style: solid;
     border-color: black;
     border-width: thin;

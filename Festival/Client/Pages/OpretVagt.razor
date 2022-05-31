@@ -68,7 +68,7 @@
 
         <br />
 
-        <b>Meddelelse: </b><label style="color: green"><b>@Meddelelse</b></label>
+        <p>Meddelelse: </p><label style="color: green"><b>@Meddelelse</b></label>
 
     </div>
 
@@ -117,7 +117,7 @@
 
         if (ErrorCode == 200)
         {
-            Meddelelse = "Din vagt er blevet oprettet!";         
+            Meddelelse = "Din vagt er blevet oprettet!";
             Vagt newVagt = new Vagt();
             EditContext = new EditContext(newVagt);
         }

@@ -5,8 +5,15 @@
 
 th {
     text-align: center;
-    color: darkgreen;
     font-family: monospace;
+}
+
+#titler {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #116300;
+    color: white;
 }
 
 td {
@@ -19,4 +26,12 @@ td {
 
 #KnapTagVagt {
     border-style: none;
+}
+
+button {
+    color: floralwhite;
+    border-radius: 1vh;
+    border-width: 2px;
+    border-color: whitesmoke;
+    background-color: darkgreen;
 }

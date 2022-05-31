@@ -1,103 +1,103 @@
-﻿@using Festival.Client.Service 
+﻿@using Festival.Client.Service
 
-@using Festival.Shared.Models 
+@using Festival.Shared.Models
 
 @using Festival.Shared.Views;
 
-@using System.Net 
+@using System.Net
 
-@using System.Diagnostics 
+@using System.Diagnostics
 
-@page "/sefrivillig" 
-
-  
-
-<PageTitle>Se Frivillig</PageTitle> 
-
-  
-
-<h3>Se Frivillig</h3> 
-
-  
-
-<table class="table"> 
-
-    <tr> 
-        <th>Kompetence type</th> 
-
-        <th>Kompetence ID</th> 
-
-        <th>Navn</th> 
-
-        <th>Person ID</th> 
-
-        <th>Telefon</th> 
-
-        <th>Email</th> 
-
-        <th>Fødselsdato</th> 
+@page "/sefrivillig"
 
 
 
-    </tr> 
+<PageTitle>Se Frivillig</PageTitle>
 
-    @foreach (var item in PersKompListe) //loop 
 
-    { 
 
-        <tr> 
-            <td>@item.Type</td> 
+<h3>Se Frivillig</h3>
 
-            <td>@item.KompetenceID</td> 
 
-            <td>@item.PersonNavn</td> 
 
-            <td>@item.PersonID</td> 
+<table class="table">
 
-            <td>@item.PersonTlf</td> 
+    <tr id="titler">
+        <th>Kompetence type</th>
 
-            <td>@item.PersonEmail</td> 
+        <th>Kompetence ID</th>
 
-            <td>@item.PersonFoedselsdato</td> 
+        <th>Navn</th>
 
-        </tr> 
+        <th>Person ID</th>
 
-    } 
+        <th>Telefon</th>
 
-</table> 
+        <th>Email</th>
 
-  
+        <th>Fødselsdato</th>
 
-@code { 
 
-    [Inject] 
 
-    public IFrivilligService FrivilligService { get; set; } 
+    </tr>
 
-  
+    @foreach (var item in PersKompListe) //loop
 
-  
+    {
 
-    private List<PersonKompetence> PersKompListe = new List<PersonKompetence>(); 
+        <tr>
+            <td>@item.Type</td>
 
-    private int ErrorCode { get; set; } = 0; 
+            <td>@item.KompetenceID</td>
 
-  
+            <td>@item.PersonNavn</td>
 
-  
+            <td>@item.PersonID</td>
 
-    protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides 
+            <td>@item.PersonTlf</td>
 
-    { 
+            <td>@item.PersonEmail</td>
 
-        Console.WriteLine("kalder api/sefrivillig"); 
+            <td>@item.PersonFoedselsdato</td>
 
-        PersKompListe = (await FrivilligService.GetAllFrivillige()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her. 
+        </tr>
 
-  
+    }
 
-    } 
+</table>
 
-  
+
+
+@code {
+
+    [Inject]
+
+    public IFrivilligService FrivilligService { get; set; }
+
+
+
+
+
+    private List<PersonKompetence> PersKompListe = new List<PersonKompetence>();
+
+    private int ErrorCode { get; set; } = 0;
+
+
+
+
+
+    protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides
+
+    {
+
+        Console.WriteLine("kalder api/sefrivillig");
+
+        PersKompListe = (await FrivilligService.GetAllFrivillige()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.
+
+
+
+    }
+
+
 
    } 
