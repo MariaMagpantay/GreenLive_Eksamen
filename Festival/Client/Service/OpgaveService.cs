@@ -17,8 +17,6 @@ namespace Festival.Client.Service
         public async Task<Opgaver[]?> GetAllOpgaver()
         {
             Console.WriteLine("Service - getAllOpgaver");
-            //var result = httpClient.GetFromJsonAsync<RolleType[]>("api/rolle");
-            //return result;
             return await httpClient.GetFromJsonAsync<Opgaver[]>("api/opgaver");
         }
 

@@ -15,6 +15,5 @@ namespace Festival.Shared.Models
         public int PersonID { get; set; }
         [Required]
         public int KompetenceID { get; set; }
-
     }
 }

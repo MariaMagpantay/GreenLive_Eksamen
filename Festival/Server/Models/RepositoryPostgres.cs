@@ -10,7 +10,8 @@ namespace Festival.Server.Models
     {
         DBContext db = new DBContext();
 
-        //CRUD til person klassen 
+
+        //CRUD til person controller 
         public List<Person> GetAllPersoner()
         {
             Console.WriteLine("get all persons repository");
@@ -56,10 +57,10 @@ namespace Festival.Server.Models
             else
                 return false;
         }
-               
+
         private bool ExistsPersonWithID(int id)//Hjælpemetode til UpdatePerson 
         {
-            Console.WriteLine("Repository.ExistsPersonWithId called with id: " + id); 
+            Console.WriteLine("Repository.ExistsPersonWithId called with id: " + id);
             var sql = $"SELECT 1 FROM person WHERE EXISTS(SELECT 1 FROM person where person_id = {id})";
             var person = db.connection.Query(sql);
             return person.Any();  //returner id = -1 hvis ikke fundet. 
@@ -91,12 +92,17 @@ namespace Festival.Server.Models
             else
                 return false;
         }
-       
+        public void RemovePersonFromVagter(int PersonID)
+        {
+            var sql = $"UPDATE vagter SET person_id = NULL WHERE person_id = {PersonID}";
+            var result = db.connection.Query(sql);
+        }
 
 
 
 
-        //Til rolle klassen 
+
+        //Til rolle controller 
         public List<RolleType> GetAllRoller()
         {
             Console.WriteLine("get all roller repository");
@@ -108,18 +114,7 @@ namespace Festival.Server.Models
 
 
 
-
-        //Til PersonKompetencer  
-        public List<PersonKompetence> GetAllFrivillige()
-        {
-            Console.WriteLine("get all Frivillige repository");
-            var sql = "SELECT person_id as personid, navn as personnavn, tlf as persontlf, email as personemail, foedselsdato as personfoedselsdato, kompetence_id as kompetenceid, type as type FROM perskomp ORDER BY type asc";
-            var frivillig = db.connection.Query<PersonKompetence>(sql);
-            return frivillig.ToList();
-        }
-
-
-        //Til vagt klassen  
+        //Til Vagt controller  
         public List<VagtView> GetAllVagter()
         {
             Console.WriteLine("get all in vagt view repository");
@@ -128,14 +123,8 @@ namespace Festival.Server.Models
             return personer.ToList();
         }
 
-        public void RemovePersonFromVagter(int PersonID)
-        {
-            var sql = $"UPDATE vagter SET person_id = NULL WHERE person_id = {PersonID}";
-            var result = db.connection.Query(sql);
-        }
-
         public void AddVagt(Vagt newVagt)
-        {        
+        {
             Console.WriteLine("add vagt repository"); //console test  
             var parameters = new DynamicParameters(); //Opretter en dictionary  
             parameters.Add("OpgaveID", newVagt.OpgaveID); //Tilføjer felter til dicionary  
@@ -169,8 +158,22 @@ namespace Festival.Server.Models
             else
                 return false;
         }
-      
-        private bool ExistsVagtWithID(int id)//Hjælpemetode 
+
+        public bool UpdateVagtStatus(Vagt status)
+        {
+            var sql = $"UPDATE vagt SET status = {status.Status} WHERE vagt_id = {status.VagtID}";
+            var vagtExists = ExistsVagtWithID(status.PersonID);
+            if (vagtExists)
+            {
+                db.connection.Query(sql);
+                return true;
+            }
+            else
+                return false;
+            Console.WriteLine("vagtstatus er opdateret");
+        }
+
+        private bool ExistsVagtWithID(int? id)//Hjælpemetode til UpdateVagt og UpdateVagtStatus
         {
             Console.WriteLine("Repository.ExistsVagtWithId called with id: " + id);
             var sql = $"SELECT 1 FROM vagter WHERE EXISTS(SELECT 1 FROM vagter where vagt_id = {id})";
@@ -180,8 +183,15 @@ namespace Festival.Server.Models
 
 
 
+        //Til Kompetence controller
+        public List<Kompetence> GetAllKompetencer()
+        {
+            Console.WriteLine("get all kompetencer repository");
+            var sql = "SELECT kompetence_id AS kompetenceid, type FROM kompetence";
+            var result = db.connection.Query<Kompetence>(sql);
+            return result.ToList();
+        }
 
-        //Til oprettelse af Kompetence 
         public void AddKompetence(Perskomp newKompetence)
         {
             Console.WriteLine("add kompetence repository");
@@ -194,16 +204,20 @@ namespace Festival.Server.Models
             Console.WriteLine("kompetence er added til person");
         }
 
-        public List<Kompetence> GetAllKompetencer()
+
+
+        //Til Frivillig controller
+        public List<PersonKompetence> GetAllFrivillige()
         {
-            Console.WriteLine("get all kompetencer repository");
-            var sql = "SELECT kompetence_id AS kompetenceid, type FROM kompetence";
-            var result = db.connection.Query<Kompetence>(sql);
-            return result.ToList();
+            Console.WriteLine("get all Frivillige repository");
+            var sql = "SELECT person_id as personid, navn as personnavn, tlf as persontlf, email as personemail, foedselsdato as personfoedselsdato, kompetence_id as kompetenceid, type as type FROM perskomp ORDER BY type asc";
+            var frivillig = db.connection.Query<PersonKompetence>(sql);
+            return frivillig.ToList();
         }
 
 
-        //Til Opgaver klassen
+
+        //Til Opgaver controller
         public List<Opgaver> GetAllOpgaver()
         {
             Console.WriteLine("get all opgaver repository");
@@ -212,7 +226,11 @@ namespace Festival.Server.Models
             return result.ToList();
         }
 
-       
+
+
+
+
+
 
         //tom constructor 
 
@@ -231,16 +249,4 @@ namespace Festival.Server.Models
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
 

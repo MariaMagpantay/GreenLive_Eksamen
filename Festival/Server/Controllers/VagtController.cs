@@ -23,18 +23,19 @@ namespace Festival.Server.Controllers
             }
         }
 
-        [HttpPost]
-        public void AddVagt(Vagt newVagt)
-        {
-            Console.WriteLine("Add person called: " + newVagt.ToString());
-            Repository.AddVagt(newVagt);
-        }
 
         [HttpGet]
         public IEnumerable<VagtView>GetAllVagter()
         {
             Console.WriteLine("GetAllVagter kaldes controller");
             return Repository.GetAllVagter();
+        }
+
+        [HttpPost]
+        public void AddVagt(Vagt newVagt)
+        {
+            Console.WriteLine("Add person called: " + newVagt.ToString());
+            Repository.AddVagt(newVagt);
         }
 
         [HttpPut]
@@ -44,12 +45,11 @@ namespace Festival.Server.Controllers
             Repository.UpdateVagt(item);
         }
 
-        //[HttpPut]
-        //public void UpdateVagtStatus(Vagt status)
-        //{
-        //    Console.WriteLine("Update status called: " + status.ToString());
-        //    Repository.UpdateVagtStatus(status);
-        //}
-
+        [HttpPut]
+        public void UpdateVagtStatus(Vagt status)
+        {
+            Console.WriteLine("Update status called: " + status.ToString());
+            Repository.UpdateVagtStatus(status);
+        }
     }
 }

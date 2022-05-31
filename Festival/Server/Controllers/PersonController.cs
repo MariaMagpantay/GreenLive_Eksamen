@@ -74,12 +74,5 @@ namespace Festival.Server.Controllers
                 return new StatusCodeResult(code);
             }
         }
-        /*[HttpGet]
-        public IEnumerable<Person> GetMaxIDPerson()
-        {
-            Console.WriteLine("Get max id kaldes controller");
-            return Repository.GetMaxIDPerson();
-        }*/
-
     }
 }

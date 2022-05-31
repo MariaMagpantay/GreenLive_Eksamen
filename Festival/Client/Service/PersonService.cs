@@ -49,13 +49,5 @@ namespace Festival.Client.Service
             var responseStatusCode = response.StatusCode;
             return (int)responseStatusCode;
         }
-        /*public Task<Person[]?> GetMaxIDPerson()
-        {
-            Console.WriteLine("Service - getmaxid fra Personer");
-            var result =
-            httpClient.GetFromJsonAsync<Person[]>("api/person");
-            return result;
-        }*/
-
     }
 }

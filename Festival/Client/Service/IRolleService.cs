@@ -6,7 +6,6 @@ namespace Festival.Client.Service
     //metoder oprettes 
     public interface IRolleService
     {
-        Task<RolleType[]?> GetAllRoller(); //henter alle obejkter i listen ind i et array
-       
+        Task<RolleType[]?> GetAllRoller(); //henter alle roller ind i en liste  
     }
 }

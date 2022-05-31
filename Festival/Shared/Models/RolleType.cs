@@ -14,9 +14,5 @@ namespace Festival.Shared.Models
 
         [Required]
         public string Rolle { get; set; }
-
-
-
-
     }
 }

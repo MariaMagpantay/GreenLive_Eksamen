@@ -3,7 +3,6 @@ using Festival.Shared.Views;
 using System.Net.Http.Json;
 
 
-
 namespace Festival.Client.Service
 
 {
@@ -17,21 +16,19 @@ namespace Festival.Client.Service
         }
 
 
-
-        public async Task<int> AddVagt(Vagt newVagt)
-        {
-            var response = await httpClient.PostAsJsonAsync("api/vagt", newVagt);
-            var responseStatusCode = response.StatusCode;
-            return (int)responseStatusCode;
-        }
-
-
         public Task<VagtView[]?> GetAllVagter()
         {
             Console.WriteLine("Service - getAllVagter");
             var result =
             httpClient.GetFromJsonAsync<VagtView[]>("api/vagt");
             return result;
+        }
+
+        public async Task<int> AddVagt(Vagt newVagt)
+        {
+            var response = await httpClient.PostAsJsonAsync("api/vagt", newVagt);
+            var responseStatusCode = response.StatusCode;
+            return (int)responseStatusCode;
         }
 
         public async Task<int> UpdateVagt(Vagt item)
@@ -41,13 +38,12 @@ namespace Festival.Client.Service
             return (int)responseStatusCode;
         }
 
-
-        //public async Task<int> UpdateVagtStatus(Vagt status)
-        //{
-        //    var response = await httpClient.PutAsJsonAsync("api/vagt", status);
-        //    var responseStatusCode = response.StatusCode;
-        //    return (int)responseStatusCode;
-        //}
+        public async Task<int> UpdateVagtStatus(Vagt status)
+        {
+            var response = await httpClient.PutAsJsonAsync("api/vagt", status);
+            var responseStatusCode = response.StatusCode;
+            return (int)responseStatusCode;
+        }
 
     }
 

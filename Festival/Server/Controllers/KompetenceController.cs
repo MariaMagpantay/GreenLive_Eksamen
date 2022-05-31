@@ -23,13 +23,6 @@ namespace Festival.Server.Controllers
         }
 
 
-        [HttpPost]
-        public void AddKompetence(Perskomp newKompetence)
-        {
-            Console.WriteLine("Add kompetence called:" + newKompetence.ToString());
-            Repository.AddKompetence(newKompetence);
-        }
-
         [HttpGet]
         public IEnumerable<Kompetence> GetAllKompetencer()
         {
@@ -38,8 +31,11 @@ namespace Festival.Server.Controllers
 
         }
 
-
-
-
+        [HttpPost]
+        public void AddKompetence(Perskomp newKompetence)
+        {
+            Console.WriteLine("Add kompetence called:" + newKompetence.ToString());
+            Repository.AddKompetence(newKompetence);
+        }
     }
 }

@@ -6,12 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-
 namespace Festival.Shared.Models
 {
     public class Vagt
     {
-
         [Required]
         public int VagtID { get; set; }
 
@@ -31,7 +29,6 @@ namespace Festival.Shared.Models
 
         [Required]
         public string VagtType { get; set; }
-
         
         public string? Status { get; set; }
     }

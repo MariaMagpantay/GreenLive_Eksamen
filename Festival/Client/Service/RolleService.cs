@@ -17,8 +17,6 @@ namespace Festival.Client.Service
         public async Task<RolleType[]?> GetAllRoller()
         {
             Console.WriteLine("Service - getAllRoller");
-            //var result = httpClient.GetFromJsonAsync<RolleType[]>("api/rolle");
-            //return result;
             return await httpClient.GetFromJsonAsync<RolleType[]>("api/rolle");
         }
 
