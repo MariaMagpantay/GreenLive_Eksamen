@@ -13,14 +13,14 @@
 
     <tr id="titler">
         <th>Vagt ID</th>
-        <th>Start Tid</th>
-        <th>Slut Tid</th>
+        <th>Starttid</th>
+        <th>Sluttid</th>
         <th>Dato</th>
-        <th>Vagt Type</th>
-        <th>Opgave Navn</th>
-        <th>Opgave Beskrivelse</th>
+        <th>Vagttype</th>
+        <th>Opgavenavn</th>
+        <th>Opgavebeskrivelse</th>
         <th>Person ID</th>
-        <th>Frivillig Navn</th>
+        <th>Navn</th>
     </tr>
 
     @foreach (var item in BesatteVagter) //loop
@@ -32,8 +32,8 @@
             else
             {
                 <td>@item.VagtID</td>
-                <td>@item.StartTid.Hour:@item.StartTid.Minute</td>
-                <td>@item.SlutTid.Hour:@item.SlutTid.Minute</td>
+                <td>@item.StartTid.ToString("HH:mm")</td>
+                <td>@item.SlutTid.ToString("HH:mm")</td>
                 <td>@item.Dato.Day/@item.Dato.Month</td>
                 <td>@item.Type</td>
                 <td>@item.OpgaveNavn</td>
@@ -61,6 +61,6 @@
     protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides
     {
         Console.WriteLine("kalder api/vagt");
-        BesatteVagter = (await VagtService.GetAllVagter()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.                                                                  
-    } 
+        BesatteVagter = (await VagtService.GetAllVagter()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.
+    }
 } 

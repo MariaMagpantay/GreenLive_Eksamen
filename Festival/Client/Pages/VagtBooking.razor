@@ -37,8 +37,8 @@
             @if (@item.PersonID < 1)
             {
                 <td>@item.VagtID</td>
-                <td>@item.StartTid.Hour:@item.StartTid.Minute</td>
-                <td>@item.SlutTid.Hour:@item.SlutTid.Minute</td>
+                <td>@item.StartTid.ToString("HH:mm")</td>
+                <td>@item.SlutTid.ToString("HH:mm")</td>
                 <td>@item.Dato.Day/@item.Dato.Month</td>
                 <td>@item.Type</td>
                 <td>@item.OpgaveNavn</td>
@@ -67,7 +67,6 @@
     private int ErrorCode { get; set; } = 0;
     private bool TagVagtSectionVisible = false;
     private int IDSelected { get; set; }
-
 
     protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides
     {
