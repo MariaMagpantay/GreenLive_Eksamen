@@ -9,7 +9,7 @@
 
 <h3>Bruger Oversigt</h3>
 
-<div style="@(editSectionVisible ? "display:block" : "display:none")">
+<div style="@(editSectionVisible ? "display:block" : "display:none")"> @*En pop-up editform til når en bruger vil opdatere sine oplysninger (PersonNavn, PersonEmail og PersonTlf)*@
     <EditForm EditContext="@EditContext" class="row p-3">
         <div class="col-md-6 mb-3">
             <label for="PersonNavn">Indtast dit fulde navn</label>
@@ -26,11 +26,12 @@
             <InputText id="PersonTlf" @bind-Value="PersonToUpdate.PersonTlf" class="form-control" />
         </div>
     </EditForm>
-    <button style="background-color:#198725" type="button" @onclick="() => UpdatePerson(PersonToUpdate)">Gem opdaterede oplysninger</button>
+    @*Nedenfor en knap som udfører metoden til at opdatere brugerens oplysninger*@
+    <button style="background-color:#198725" type="button" @onclick="() => UpdatePerson(PersonToUpdate)">Gem opdaterede oplysninger</button> 
 </div>
 
-<table class="table">
-    <tr id="titler">
+<table class="table"> @*Oprettelse af tabel til at udskrive en oversigt af alle brugerer*@
+    <tr id="titler"> @*Tabellens overskrifter*@
         <th>Person ID</th>
         <th>Navn</th>
         <th>Telefon</th>
@@ -39,9 +40,9 @@
         <th>Rolle</th>
     </tr>
 
-    @foreach (var item in PersonListe) //loop
+    @foreach (var item in PersonListe) //looper igennem listen af personer og udskriver dem i tabellen
     {
-        Dictionary<int, string> RolleTitel = new Dictionary<int, string>();
+        Dictionary<int, string> RolleTitel = new Dictionary<int, string>(); @*Til at oversætte RolleID(int) til strings *@
         RolleTitel.Add(1, "Frivillig");
         RolleTitel.Add(2, "Koordinator");
         Console.WriteLine(RolleTitel[1]);
@@ -51,9 +52,12 @@
             <td>@item.PersonNavn</td>
             <td>@item.PersonTlf</td>
             <td>@item.PersonEmail</td>
-            <td>@item.PersonFoedselsdato.ToString("dd'/'MM'/'yyyy")</td>
-            <td>@RolleTitel[item.RolleID]</td>
+            <td>@item.PersonFoedselsdato.ToString("dd'/'MM'/'yyyy")</td> @*ToString metode til af udskrive datoen mere læsbart*@
+            <td>@RolleTitel[item.RolleID]</td> @*Her bruger dictionary oprettet ovenover*@
+
+            @*Nedenfor en knap som udfører metoden til at slette en bruger*@
             <td id="KnapSlettd"><button id="SletKnap" style="background-color:red" type="button" @onclick="() => OnDeletePerson(item)">Slet</button></td>
+            @*Nedenfor en knap som udfører metoden til at vise den editform, hvor brugeren kan opdatere sine oplysninger*@
             <td id="KnapRettd"><button id="RetKnap" style="background-color: rgb(255,191,0)" type="button" @onclick="() => ShowEditSection(item.PersonID)">Ret</button></td>
         </tr>
     }
@@ -63,53 +67,53 @@
 
 @code {
     [Inject]
-    public IPersonService PersonService { get; set; }
+    public IPersonService PersonService { get; set; } 
 
-    Person PersonToUpdate = new Person();
-    private EditContext EditContext;
-    private List<Person> PersonListe = new List<Person>();
-    private bool editSectionVisible = false;
-    private int ErrorCode { get; set; } = 0;
-    private int IDSelected { get; set; }
+    Person PersonToUpdate = new Person(); 
+    private List<Person> PersonListe = new List<Person>(); 
+    private EditContext EditContext; 
+    private bool editSectionVisible = false; 
+    private int ErrorCode { get; set; } = 0; 
+    private int IDSelected { get; set; } 
 
 
-    protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides
-    {
+    protected override async Task OnInitializedAsync() //Metode lidt ligesom ToString(), fra "componentbase" som kan overrides
+    {                                                  //Når initialiseret sker koden inde i denne metode
         Console.WriteLine("kalder api/person");
-        EditContext = new EditContext(PersonToUpdate);
-        PersonListe = (await PersonService.GetAllPersoner()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.
+        EditContext = new EditContext(PersonToUpdate); 
+        PersonListe = (await PersonService.GetAllPersoner()).ToList(); //Henter data(personer) og indsætter i en listen.
     }
 
 
-    public async Task OnDeletePerson(Person item)
+    public async Task OnDeletePerson(Person item) //Metode til at slette en person
     {
-        IDSelected = item.PersonID;
-        ErrorCode = (await PersonService.DeletePerson(IDSelected));
+        IDSelected = item.PersonID; //vælger en person på et bestemt ID
+        ErrorCode = (await PersonService.DeletePerson(IDSelected)); //sletter en person på det valgte ID
         Console.WriteLine($"Id seletected to delete {IDSelected}, responsecode: {ErrorCode} ");
-        if (ErrorCode == (int)HttpStatusCode.OK)
+        if (ErrorCode == (int)HttpStatusCode.OK) 
         {
-            PersonListe = (await PersonService.GetAllPersoner()).ToList();
+            PersonListe = (await PersonService.GetAllPersoner()).ToList(); //hvis det går godt slettes personen og en ny liste af personer bliver hentet
         }
     }
 
-    public void ShowEditSection(int PersonId)
+    public void ShowEditSection(int PersonId) //metoden til at vise den editform, hvor brugeren kan opdatere sine oplysninger
     {
-        this.editSectionVisible = true;
+        this.editSectionVisible = true; //true, betyder at form bliver vist
         PersonToUpdate = new Person();
-        PersonToUpdate.PersonID = PersonId;
+        PersonToUpdate.PersonID = PersonId; //person på det valgte ID kan updateres
     }
 
-    public async Task UpdatePerson(Person item)
+    public async Task UpdatePerson(Person item) //metode til opdatere en person
     {
-        editSectionVisible = false;
-        IDSelected = item.PersonID;
-        ErrorCode = (await PersonService.UpdatePerson(item));
+        editSectionVisible = false; //når knappen med navn "Gem opdaterede oplysninger" bliver trykket, bliver formen ikke længere vist
+        IDSelected = item.PersonID; 
+        ErrorCode = (await PersonService.UpdatePerson(item));//updaterer en person på det valgte ID
 
         Console.WriteLine($"Id seletected to update {IDSelected}, responsecode: {ErrorCode} ");
 
         if (ErrorCode == (int)HttpStatusCode.OK)
         {
-            PersonListe = (await PersonService.GetAllPersoner()).ToList();
+            PersonListe = (await PersonService.GetAllPersoner()).ToList(); //hvis det går godt updateres personen og en ny liste af personer bliver hentet
         }
     }
 }

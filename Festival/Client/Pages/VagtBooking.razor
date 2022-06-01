@@ -8,7 +8,7 @@
 <PageTitle>Vagt Booking</PageTitle>
 
 <h3>Book Vagter</h3>
-<div style="@(TagVagtSectionVisible ? "display:block" : "display:none")">
+<div style="@(TagVagtSectionVisible ? "display:block" : "display:none")"> @*En pop-up editform hvor PersonID kan indtastes, for at booke en vagt*@
 
     <EditForm EditContext="@EditContext" class="row p-3">
         <div class="col-md-6 mb-3">
@@ -16,12 +16,12 @@
             <InputNumber id="PersonID" @bind-Value="VagtToUpdate.PersonID" class="form-control" />
         </div>
     </EditForm>
-
+    @*Nedenfor en knap som udfører metoden til at opdatere PersonID på en vagt*@
     <button style="background-color:#198725" type="button" @onclick="() => UpdateVagt(VagtToUpdate)">Godkend Vagt</button>
 </div>
 
-<table class="table">
-    <tr id="titler">
+<table class="table"> @*Oprettelse af tabel til at udskrive en oversigt af alle ledige vagter*@
+    <tr id="titler"> @*Tabellens overskrifter*@
         <th>Vagt ID</th>
         <th>Vagtstart</th>
         <th>Vagtslut</th>
@@ -31,23 +31,21 @@
         <th>Opgavebeskrivelse</th>
     </tr>
 
-    @foreach (var item in LedigeVagter) //loop
+    @foreach (var item in LedigeVagter) //looper igennem listen og indsætter i tabellen
     {
         <tr>
-            @if (@item.PersonID < 1)
+            @if (@item.PersonID < 1) //item fra LedigeVagter indsættes kun i listen hvis PersonID < 1
             {
                 <td>@item.VagtID</td>
-                <td>@item.StartTid.ToString("HH':'mm")</td>
-                <td>@item.SlutTid.ToString("HH':'mm")</td>
+                <td>@item.StartTid.ToString("HH':'mm")</td> @*ToString metode til af udskrive tid og datoen mere læsbart*@
+                <td>@item.SlutTid.ToString("HH':'mm")</td> 
                 <td>@item.Dato.ToString("dd'/'MM")</td>
                 <td>@item.Type</td>
                 <td>@item.OpgaveNavn</td>
                 <td>@item.Beskrivelse</td>
 
+                 @*Nedenfor en knap som udfører metoden til at vise den editform, hvor PersonID kan indsættes*@
                 <td id="KnapTagVagt"><button style="background-color:darkgreen" type="button" @onclick="() => showTagVagtSection(item)">Tag Vagt</button></td>
-            }
-            else
-            {
             }
         </tr>
     }
@@ -68,16 +66,16 @@
     private bool TagVagtSectionVisible = false;
     private int IDSelected { get; set; }
 
-    protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides
+    protected override async Task OnInitializedAsync() //Når initialiseret sker koden inde i denne metode
     {
         Console.WriteLine("kalder api/vagt");
         EditContext = new EditContext(VagtToUpdate);
-        LedigeVagter = (await VagtService.GetAllVagter()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.
+        LedigeVagter = (await VagtService.GetAllVagter()).ToList(); //Henter vagter(data) og indsætter i en listen.
     }
 
-    public void showTagVagtSection(VagtView selectedvagt)
+    public void showTagVagtSection(VagtView selectedvagt) //metoden til at vise den editform, hvor PersonId kan indsættes
     {
-        this.TagVagtSectionVisible = true;
+        this.TagVagtSectionVisible = true; //true, betyder at form bliver vist
         VagtToUpdate = new Vagt();
         VagtToUpdate.VagtID = selectedvagt.VagtID;
         VagtToUpdate.OpgaveID = selectedvagt.OpgaveID;
@@ -87,17 +85,17 @@
         VagtToUpdate.VagtType = selectedvagt.Type;
     }
 
-    public async Task UpdateVagt(Vagt item)
+    public async Task UpdateVagt(Vagt item) //metode til opdatere personID på en vagt
     {
-        TagVagtSectionVisible = false;
+        TagVagtSectionVisible = false; //når knappen med navn "Godkend vagt" bliver trykket, bliver formen ikke længere vist
         IDSelected = item.VagtID;
-        ErrorCode = (await VagtService.UpdateVagt(item));
+        ErrorCode = (await VagtService.UpdateVagt(item)); //updaterer PersonID på det valgte VagtID
 
         Console.WriteLine($"Id seletected to update {IDSelected}, responsecode: {ErrorCode} ");
 
         if (ErrorCode == (int)HttpStatusCode.OK)
         {
-            LedigeVagter = (await VagtService.GetAllVagter()).ToList();
+            LedigeVagter = (await VagtService.GetAllVagter()).ToList(); //hvis det går godt updateres vagten og en ny liste af ledige vagter bliver hentet
         }
     }
 } 

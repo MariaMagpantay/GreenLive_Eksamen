@@ -12,7 +12,7 @@
 
 <h3>Opret en bruger</h3>
 
-<EditForm EditContext="@EditContext" class="row p-3">
+<EditForm EditContext="@EditContext" class="row p-3"> @*En editform, hvor en person kan indtaste sine oplysninger for at oprette sig som bruger*@
 
     <h3>Indtast dine oplysninger</h3>
     <div class="col-md-6 mb-3">
@@ -37,7 +37,7 @@
 
     <div class="col-md-6 mb-3">
         <label for="Rollen">Vælg din stilling</label>
-        <InputSelect id="Rolle" @bind-Value="newRolle.RolleID" class="form-control">
+        <InputSelect id="Rolle" @bind-Value="newRolle.RolleID" class="form-control"> @*En dropdown som viser de mulige rollevalg*@
             @foreach (var item in RolleArrTekst)
             {
                 <option value="@item.RolleID">@item.Rolle</option>
@@ -45,20 +45,14 @@
         </InputSelect>
     </div>
 
-
+    @*Nedenfor en knap som udfører metoden til at oprette en person som bruger*@
     <button type="submit" style="background-color:#198725" class="button" @onclick="OpretPerson">Opret</button>
     <br />
-
-    <div>
-        <p>
-            Meddelelse:
-            <label style="color: green"><b>@MedPer</b></label>
-            <label style="color: red"><b>@MedPerFail</b></label>
-        </p>
-    </div>
+    <p> Meddelelse:<label style="color: green"><b>@MedPer</b></label></p> 
 </EditForm>
 
-<EditForm EditContext="@EditContext" class="row p-3">
+
+<EditForm EditContext="@EditContext" class="row p-3"> @*En editform, hvor en bruger kan indtaste sine kompetencer*@
     <h3>Tilføj Kompetencer</h3>
 
     <div class="col-md-6 mb-3">
@@ -68,7 +62,7 @@
 
     <div class="col-md-6 mb-3">
         <label for="Kompetence">Indsæt en kompetence</label>
-        <InputSelect id="Kompetence" @bind-Value="newKompetence.KompetenceID" class="form-control">
+        <InputSelect id="Kompetence" @bind-Value="newKompetence.KompetenceID" class="form-control"> @*En dropdown som viser de mulige kompetencevalg*@
             @foreach (var item in KompArrTekst)
             {
                 <option value="@item.KompetenceID">@item.Type</option>
@@ -76,85 +70,72 @@
         </InputSelect>
     </div>
 
+    @*Nedenfor en knap som udfører metoden til at oprette en brugers kompetencer*@
     <button type="submit" style="background-color:#198725" class="button" @onclick="OpretKompetence">Tilføj en kompetence</button>
     <br />
-    <p>
-        Meddelelse:
-        <label style="color: green"><b>@MedKomp</b></label>
-        <label style="color: red"><b>@MedKompFail</b></label>
-    </p>
+    <p>Meddelelse: <label style="color: green"><b>@MedKomp</b></label></p>
 </EditForm>
 
 @code {
+    
     [Inject]
     public IPersonService PersonService { get; set; }
+
     [Inject]
     public IKompetenceService KompetenceService { get; set; }
+
     [Inject]
     public IRolleService RolleService { get; set; }
 
-    Person newPerson = new Person();
-    Perskomp newKompetence = new Perskomp();
-    RolleType newRolle = new RolleType();
-    private List<Person> PersonListe = new List<Person>();
-    private int[] RolleArrID = { 1, 2 };
-    private RolleType[] RolleArrTekst = { };
-    private int[] KompArrID = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-    private Kompetence[] KompArrTekst = { };
-    private EditContext EditContext;
-    private int ErrorCode { get; set; } = 0;
-    //private string Meddelelse = { get; set; } = "";
-    private string MedPer { get; set; } = "";
-    private string MedPerFail { get; set; } = "";
-    private string MedKomp { get; set; } = "";
-    private string MedKompFail { get; set; } = "";
+    Person newPerson = new Person(); 
+    Perskomp newKompetence = new Perskomp(); 
+    RolleType newRolle = new RolleType(); 
+    private List<Person> PersonListe = new List<Person>(); 
+    private int[] RolleArrID = { 1, 2 }; 
+    private RolleType[] RolleArrTekst = { }; 
+    private int[] KompArrID = { 1, 2, 3, 4, 5, 6, 7, 8, 9 }; 
+    private Kompetence[] KompArrTekst = { }; 
+    private EditContext EditContext; 
+    private int ErrorCode { get; set; } = 0; 
+    private string MedPer { get; set; } = ""; 
+    private string MedKomp { get; set; } = ""; 
 
-    protected async override Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync() //Når initialiseret sker koden inde i denne metode
     {
-        EditContext = new EditContext(newPerson);
-        newPerson.RolleID = RolleArrID[0];
-        newKompetence.KompetenceID = KompArrID[0];
-        RolleArrTekst = (await RolleService.GetAllRoller());
-        KompArrTekst = (await KompetenceService.GetAllKompetencer());
+        EditContext = new EditContext(newPerson); 
+        newPerson.RolleID = RolleArrID[0]; //viser det første rollevalg i arrayet som default i InputSelect. Det samme med kompetencevalg i linjen nedenfor
+        newKompetence.KompetenceID = KompArrID[0]; 
+        RolleArrTekst = (await RolleService.GetAllRoller()); //Henter alle roller(data)
+        KompArrTekst = (await KompetenceService.GetAllKompetencer()); //Henter alle kompetencer(data)
     }
 
 
-    private async Task OpretPerson()
+    private async Task OpretPerson() //Metode til at oprette en person som bruger
     {
         Console.WriteLine("on submit person called");
-        int NewPersonID;
-        (ErrorCode, NewPersonID) = await PersonService.AddPerson(newPerson);
-        newPerson.RolleID = RolleArrID[0];
-
+        int NewPersonID; //variabel til gemme brugerens id
+        (ErrorCode, NewPersonID) = await PersonService.AddPerson(newPerson); //opretter en person som bruger med de indtastede oplysninger
+        newPerson.RolleID = RolleArrID[0]; //nuslstiller rollevalget i InputSelect til det første i arrayet
         Console.WriteLine("Person added: return code: " + ErrorCode);
-        if (ErrorCode == 200)
+        if (ErrorCode == 200) 
         {
-            MedPer = "Din bruger er hermed oprettet med id: " + NewPersonID;
-            newKompetence.PersonID = NewPersonID;
-            Person newPerson = new Person();
+            MedPer = "Din bruger er hermed oprettet med id: " + NewPersonID; 
+            newKompetence.PersonID = NewPersonID; //newKompetence.PersonID får det ny oprettede ID som værdi
+            Person newPerson = new Person();  
             EditContext = new EditContext(newPerson);
         }
-        else
-        {
-            MedPerFail = "Noget gik galt - Din bruger blev ikke oprettet ";
-        }
-
     }
-    private async Task OpretKompetence()
+    private async Task OpretKompetence() //Metode til at oprette kompetencer til en bruger
     {
         Console.WriteLine("on submit Perskomp called");
-        ErrorCode = await KompetenceService.AddKompetence(newKompetence);
-        newKompetence.KompetenceID = KompArrID[0];
+        ErrorCode = await KompetenceService.AddKompetence(newKompetence); //opretter kompetencer
+        newKompetence.KompetenceID = KompArrID[0]; //nuslstiller kompetencevalget i InputSelect til det første i arrayet
         Console.WriteLine("Kompetence added: return code: " + ErrorCode);
-        if (ErrorCode == 200)
+        if (ErrorCode == 200) 
         {
             MedKomp = "Din Kompetence er hermed tilføjet! Hvis du har flere, så tilføj blot igen";
-            Perskomp newKompetence = new Perskomp();
-            EditContext = new EditContext(newKompetence);
-        }
-        else
-        {
-            MedKompFail = "Noget gik galt - Din kompetence blev ikke tilføjet til din bruger";
+            Perskomp newKompetence = new Perskomp(); 
+            EditContext = new EditContext(newKompetence); 
         }
     }
 }

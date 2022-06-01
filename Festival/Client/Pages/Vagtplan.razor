@@ -9,9 +9,8 @@
 
 <h3>Vagt Plan</h3>
 
-<table class="table">
-
-    <tr id="titler">
+<table class="table"> @*Oprettelse af tabel til at udskrive en oversigt af alle besatte vagter*@
+    <tr id="titler"> @*Tabellens overskrifter*@
         <th>Vagt ID</th>
         <th>Starttid</th>
         <th>Sluttid</th>
@@ -23,18 +22,18 @@
         <th>Navn</th>
     </tr>
 
-    @foreach (var item in BesatteVagter) //loop
+    @foreach (var item in BesatteVagter) //looper igennem listen og indsætter i tabellen
     {
         <tr>
-            @if (@item.PersonID < 1)
+            @if (@item.PersonID < 1) //item fra BesatteVagter indsættes IKKE i listen hvis PersonID < 1
             {
             }
             else
             {
                 <td>@item.VagtID</td>
-                <td>@item.StartTid.ToString("HH:mm")</td>
+                <td>@item.StartTid.ToString("HH:mm")</td> @*ToString metode til af udskrive tid og datoen mere læsbart*@
                 <td>@item.SlutTid.ToString("HH:mm")</td>
-                <td>@item.Dato.ToString("dd'/'MM")</td>
+                <td>@item.Dato.ToString("dd'/'MM")</td> 
                 <td>@item.Type</td>
                 <td>@item.OpgaveNavn</td>
                 <td>@item.Beskrivelse</td>
@@ -54,13 +53,10 @@
 
     private List<VagtView> BesatteVagter = new List<VagtView>();
     private int ErrorCode { get; set; } = 0;
-    private Vagt VagtStatus = new Vagt();
-    private EditContext EditContext;
-    private String[] StatusValg = { "Planlagt", "Igangværende", "Udført" };
 
-    protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides
+    protected override async Task OnInitializedAsync() //Når initialiseret sker koden inde i denne metode
     {
         Console.WriteLine("kalder api/vagt");
-        BesatteVagter = (await VagtService.GetAllVagter()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.
+        BesatteVagter = (await VagtService.GetAllVagter()).ToList(); //Henter vagter(data) og indsætter i en listen.
     }
 } 

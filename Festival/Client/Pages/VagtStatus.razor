@@ -10,32 +10,24 @@
 
 <h3>Vagt Status</h3>
 
-<div style="@(TagVagtSectionVisible ? "display:block" : "display:none")">
-
+<div style="@(TagVagtSectionVisible ? "display:block" : "display:none")"> @*En pop-up editform hvor Status på en vagt kan vælges*@
     <EditForm EditContext="@EditContext" class="row p-3">
-
         <div class="col-md-6 mb-3">
-
             <label for="Status">Vælg status</label>
-
-            <InputSelect id="Status" @bind-Value="StatusVagt.Status" class="form-control">
-
+            <InputSelect id="Status" @bind-Value="StatusVagt.Status" class="form-control"> @*En dropdown som viser de mulige statusvalg*@
                 @foreach (var item in StatusValg)
                 {
                     <option value="@item">@item</option>
                 }
             </InputSelect>
-
-
         </div>
-
     </EditForm>
-
+    @*Nedenfor en knap som udfører metoden til at opdatere satus på en vagt*@
     <button style="background-color:#198725" type="button" @onclick="() => UpdateStatus(StatusVagt)">Godkend Vagt</button>
 </div>
-<table class="table">
 
-    <tr id="titler">
+<table class="table"> @*Oprettelse af tabel til at udskrive en oversigt af alle vagter og deres status*@
+    <tr id="titler"> @*Tabellens overskrifter*@
         <th>Vagt ID</th>
         <th>Starttid</th>
         <th>Sluttid</th>
@@ -45,22 +37,23 @@
         <th>Ændringstidspunkt</th>
     </tr>
 
-    @foreach (var item in BesatteVagter) //loop
+    @foreach (var item in BesatteVagter) //looper igennem listen og indsætter i tabellen
     {
         <tr>
-            @if (@item.PersonID < 1)
+            @if (@item.PersonID < 1) //item fra BesatteVagter indsættes IKKE i listen hvis PersonID < 1
             {
             }
             else
             {
                 <td>@item.VagtID</td>
-                <td>@item.StartTid.ToString("HH:mm")</td>
+                <td>@item.StartTid.ToString("HH:mm")</td> @*ToString metode til af udskrive tid og datoen mere læsbart*@
                 <td>@item.SlutTid.ToString("HH:mm")</td>
                 <td>@item.Dato.ToString("dd'/'MM")</td>
                 <td>@item.Type</td>
                 <td>@item.Status</td>
                 <td>@item.Changed.ToLocalTime()</td>
 
+                @*Nedenfor en knap som udfører metoden til at vise den editform, hvor Status på vagten kan ændres*@
                 <td id="KnapTagVagt"><button style="background-color:rgb(255,191,0)" type="button" @onclick="() => ShowStatusSelectSection(item)">Opdatér Status</button></td>
            }
         </tr>
@@ -81,26 +74,22 @@
     private Vagt StatusVagt = new Vagt();
     private EditContext EditContext;
     private String[] StatusValg = { "Planlagt", "Igangværende", "Udført" };
-    private int IDSelected { get; set; }
     private bool TagVagtSectionVisible = false;
+    private int IDSelected { get; set; }
 
 
-    protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides
+    protected override async Task OnInitializedAsync() //Når initialiseret sker koden inde i denne metode
     {
         Console.WriteLine("kalder api/vagt");
-        StatusVagt.Status = StatusValg[0];
+        StatusVagt.Status = StatusValg[0]; //viser det første statusvalg i arrayet som default i InputSelect.
         EditContext = new EditContext(StatusVagt);
-        BesatteVagter = (await VagtService.GetAllVagter()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.
+        BesatteVagter = (await VagtService.GetAllVagter()).ToList(); //Henter vagter(data) og indsætter i en listen.
     }
 
-    private async Task ShowStatusSelectSection(VagtView selectedvagt)
-
+    private async Task ShowStatusSelectSection(VagtView selectedvagt) //metoden til at vise den editform, hvor PersonId kan indsættes
     {
-        this.TagVagtSectionVisible = true;
+        this.TagVagtSectionVisible = true; //true, betyder at form bliver vist
         StatusVagt = new Vagt();
-        selectedvagt.VagtID = selectedvagt.VagtID;
-
-
         StatusVagt.VagtID = selectedvagt.VagtID;
         StatusVagt.OpgaveID = selectedvagt.OpgaveID;
         StatusVagt.StartTid = selectedvagt.StartTid;
@@ -109,24 +98,19 @@
         StatusVagt.VagtType = selectedvagt.Type;
         StatusVagt.Status = selectedvagt.Status;
     }
-    public async Task UpdateStatus(Vagt item)
 
+
+    public async Task UpdateStatus(Vagt item) //metode til opdatere Status på en vagt
     {
-
-        TagVagtSectionVisible = false;
-
+        TagVagtSectionVisible = false; //når knappen med navn "Opdatér Status" bliver trykket, bliver formen ikke længere vist
         IDSelected = item.VagtID;
-        ErrorCode = (await StatusService.UpdateVagtStatus(item));
-
+        ErrorCode = (await StatusService.UpdateVagtStatus(item)); //updaterer Status på det valgte VagtID
         StatusVagt.Status = StatusValg[0];
-
         Console.WriteLine($"Id seletected to update {IDSelected}, responsecode: {ErrorCode} ");
 
-
         if (ErrorCode == (int)HttpStatusCode.OK)
-
         {
-            BesatteVagter = (await VagtService.GetAllVagter()).ToList();
+            BesatteVagter = (await VagtService.GetAllVagter()).ToList(); //hvis det går godt updateres vagten og en ny liste af ledige vagter bliver hentet
         }
     }
 } 
