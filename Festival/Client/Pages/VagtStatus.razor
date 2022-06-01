@@ -31,8 +31,6 @@
     </EditForm>
 
     <button style="background-color:#198725" type="button" @onclick="() => UpdateStatus(StatusVagt)">Godkend Vagt</button>
-    <p>Meddelelse: </p><label style="color: green"><b>@Meddelelse</b></label>
-
 </div>
 <table class="table">
 
@@ -85,7 +83,6 @@
     private String[] StatusValg = { "Planlagt", "Igangværende", "Udført" };
     private int IDSelected { get; set; }
     private bool TagVagtSectionVisible = false;
-    private string Meddelelse { get; set; } = "";
 
     protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides
     {
@@ -106,18 +103,12 @@
 
 
         StatusVagt.VagtID = selectedvagt.VagtID;
-
         StatusVagt.OpgaveID = selectedvagt.OpgaveID;
-
         StatusVagt.StartTid = selectedvagt.StartTid;
-
         StatusVagt.SlutTid = selectedvagt.SlutTid;
-
         StatusVagt.Dato = selectedvagt.Dato;
-
         StatusVagt.VagtType = selectedvagt.Type;
         StatusVagt.Status = selectedvagt.Status;
-
     }
     public async Task UpdateStatus(Vagt item)
 
@@ -136,21 +127,7 @@
         if (ErrorCode == (int)HttpStatusCode.OK)
 
         {
-            Meddelelse = "Status for vagten er hermed opdateret!";
             BesatteVagter = (await VagtService.GetAllVagter()).ToList();
-
         }
     }
-
-    //private async Task StatusSelect(VagtView changed)
-    //{
-    //    // status.Status = VagtStatus.Status;
-    //    var chgVagt = new Vagt();
-    //    //{
-    //        //   // VagtID = changed.VagtID,
-    //        //   // OpgaveID = changed.OpgaveID,
-    //        //    //Status = changed.Status
-    //        //};
-    //    ErrorCode  = await VagtService.UpdateVagtStatus(chgVagt);
-    //}
-   } 
+} 

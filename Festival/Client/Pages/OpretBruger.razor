@@ -5,6 +5,7 @@
 @using System.Diagnostics
 @using System.Linq;
 @using System.Collections.Generic;
+@page "/"
 @page "/opretbruger"
 
 <PageTitle>Opret Bruger</PageTitle>
@@ -45,12 +46,11 @@
     </div>
 
 
-
     <button type="submit" style="background-color:#198725" class="button" @onclick="OpretPerson">Opret</button>
     <br />
+
     <div>
         <br />
-
         <p>
             Meddelelse:
             <label style="color: green"><b>@MedPer</b></label>
@@ -61,7 +61,6 @@
 </EditForm>
 
 <EditForm EditContext="@EditContext" class="row p-3">
-
     <div class="col-md-6 mb-3">
         <label for="Personensid">Indtast dit Person ID</label>
         <InputNumber id="Personensid" @bind-Value="newKompetence.PersonID" class="form-control" />
@@ -76,6 +75,7 @@
             }
         </InputSelect>
     </div>
+
     <button type="submit" style="background-color:#198725" class="button" @onclick="OpretKompetence">Tilføj en kompetence</button>
     <br />
     <p>
@@ -101,7 +101,6 @@
     private RolleType[] RolleArrTekst = { };
     private int[] KompArrID = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     private Kompetence[] KompArrTekst = { };
-
     private EditContext EditContext;
     private int ErrorCode { get; set; } = 0;
     //private string Meddelelse = { get; set; } = "";
@@ -113,7 +112,6 @@
     protected async override Task OnInitializedAsync()
     {
         EditContext = new EditContext(newPerson);
-
         newPerson.RolleID = RolleArrID[0];
         newKompetence.KompetenceID = KompArrID[0];
         RolleArrTekst = (await RolleService.GetAllRoller());
@@ -124,7 +122,6 @@
     private async Task OpretPerson()
     {
         Console.WriteLine("on submit person called");
-
         int NewPersonID;
         (ErrorCode, NewPersonID) = await PersonService.AddPerson(newPerson);
         newPerson.RolleID = RolleArrID[0];
@@ -159,7 +156,5 @@
         {
             MedKompFail = "Noget gik galt - Din kompetence blev ikke tilføjet til din bruger";
         }
-
     }
-
 }

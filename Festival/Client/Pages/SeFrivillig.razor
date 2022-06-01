@@ -1,103 +1,52 @@
 ﻿@using Festival.Client.Service
-
 @using Festival.Shared.Models
-
 @using Festival.Shared.Views;
-
 @using System.Net
-
 @using System.Diagnostics
-
 @page "/sefrivillig"
-
-
 
 <PageTitle>Se Frivillig</PageTitle>
 
-
-
 <h3>Se Frivillig</h3>
 
-
-
 <table class="table">
-
     <tr id="titler">
-        <th>Kompetence type</th>
-
+        <th>Kompetencetype</th>
         <th>Kompetence ID</th>
-
         <th>Navn</th>
-
         <th>Person ID</th>
-
         <th>Telefon</th>
-
         <th>Email</th>
-
         <th>Fødselsdato</th>
-
-
-
     </tr>
 
     @foreach (var item in PersKompListe) //loop
-
     {
-
         <tr id="values">
             <td>@item.Type</td>
-
             <td>@item.KompetenceID</td>
-
             <td>@item.PersonNavn</td>
-
             <td>@item.PersonID</td>
-
             <td>@item.PersonTlf</td>
-
             <td>@item.PersonEmail</td>
-
             <td>@item.PersonFoedselsdato</td>
-
         </tr>
-
     }
-
 </table>
 
 
-
 @code {
-
     [Inject]
-
     public IFrivilligService FrivilligService { get; set; }
 
 
-
-
-
     private List<PersonKompetence> PersKompListe = new List<PersonKompetence>();
-
     private int ErrorCode { get; set; } = 0;
 
 
-
-
-
     protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides
-
     {
-
         Console.WriteLine("kalder api/sefrivillig");
-
         PersKompListe = (await FrivilligService.GetAllFrivillige()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.
-
-
-
     }
-
-
-
-   } 
+} 

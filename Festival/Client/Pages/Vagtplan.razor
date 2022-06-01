@@ -41,11 +41,8 @@
                 <td>@item.PersonID</td>
                 <td>@item.Navn</td>
             }
-
         </tr>
-
     }
-
 </table>
 
 
@@ -64,20 +61,6 @@
     protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides
     {
         Console.WriteLine("kalder api/vagt");
-        BesatteVagter = (await VagtService.GetAllVagter()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.
-                                                                     // EditContext = new EditContext(VagtStatus);
-                                                                     // VagtStatus.Status = StatusValg[0];
-    }
-
-    //private async Task StatusSelect(VagtView changed)
-    //{
-    //    // status.Status = VagtStatus.Status;
-    //    var chgVagt = new Vagt();
-    //    //{
-    //        //   // VagtID = changed.VagtID,
-    //        //   // OpgaveID = changed.OpgaveID,
-    //        //    //Status = changed.Status
-    //        //};
-    //    ErrorCode  = await VagtService.UpdateVagtStatus(chgVagt);
-    //}
-   } 
+        BesatteVagter = (await VagtService.GetAllVagter()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.                                                                  
+    } 
+} 
