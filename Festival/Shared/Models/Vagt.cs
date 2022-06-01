@@ -17,10 +17,9 @@ namespace Festival.Shared.Models
         public int OpgaveID { get; set; }
 
         [Required]
-        public DateTime StartTid { get; set; } 
-
+        public DateTime StartTid { get; set; }
         [Required]
-        public DateTime SlutTid { get; set; } 
+        public DateTime SlutTid { get; set; }
 
         [Required]
         public DateTime Dato { get; set; } = DateTime.Now;
@@ -29,7 +28,7 @@ namespace Festival.Shared.Models
 
         [Required]
         public string VagtType { get; set; }
-        
+
         public string? Status { get; set; }
     }
 

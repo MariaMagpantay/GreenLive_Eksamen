@@ -74,16 +74,9 @@
     private int ErrorCode { get; set; } = 0;
     private string Meddelelse { get; set; } = "";
 
-
-    protected async override void OnInitialized()
-
-    {
-        EditContext = new EditContext(newVagt);
-
-    }
-
     protected override async Task OnInitializedAsync()
     {
+        EditContext = new EditContext(newVagt);
         OpgaveValg = (await OpgaveService.GetAllOpgaver());
         newVagt.OpgaveID = opgaveValg[0];
     }
@@ -91,7 +84,7 @@
 
     private async Task NyVagt()
     {
-        Console.WriteLine("on submit vagt called: opgave id = "+newOpgave.OpgaveID);
+        Console.WriteLine("on submit vagt called: opgave id = " + newOpgave.OpgaveID);
         newVagt.OpgaveID = newOpgave.OpgaveID;
         ErrorCode = await VagtService.AddVagt(newVagt);
         newVagt.OpgaveID = opgaveValg[0];

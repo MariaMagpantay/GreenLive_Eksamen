@@ -32,3 +32,10 @@ td {
     padding: 1vh;
     text-align: center;
 }
+
+button {
+    color: floralwhite;
+    border-radius: 1vh;
+    border-width: 2px;
+    border-color: floralwhite;
+}

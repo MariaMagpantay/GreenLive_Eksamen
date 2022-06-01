@@ -15,7 +15,7 @@ namespace Festival.Server.Models
         public List<Person> GetAllPersoner()
         {
             Console.WriteLine("get all persons repository");
-            var sql = "SELECT person_id as personid, navn as personnavn, tlf as persontlf, email as personemail, foedselsdato as personfoedselsdato, rolle_id as rolleid, team_id as teamid FROM person";
+            var sql = "SELECT person_id as personid, navn as personnavn, tlf as persontlf, email as personemail, foedselsdato as personfoedselsdato, rolle_id as rolleid, team_id as teamid FROM person ORDER BY person_id ASC;";
             var personer = db.connection.Query<Person>(sql);
             return personer.ToList();
         }
