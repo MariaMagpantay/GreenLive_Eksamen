@@ -1,0 +1,197 @@
+-------Oprettelse af databasen-------------
+CREATE DATABASE greenlive
+    WITH 
+    OWNER = dbadmin
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'en_US.utf8'
+    LC_CTYPE = 'en_US.utf8'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+
+-------Oprettelse af tabeller med PK'er og FK'er--------------
+BEGIN;
+
+
+CREATE TABLE IF NOT EXISTS public.kategori
+(
+    kategori_id integer NOT NULL,
+    navn text NOT NULL,
+    beskrivelse text NOT NULL,
+    PRIMARY KEY (kategori_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.kompetence
+(
+    kompetence_id integer NOT NULL,
+    type text NOT NULL,
+    PRIMARY KEY (kompetence_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.opgaver
+(
+    opgave_id integer NOT NULL,
+    opgave_navn text NOT NULL,
+    beskrivelse text NOT NULL,
+    kategori_id integer NOT NULL,
+    PRIMARY KEY (opgave_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.pers_komp
+(
+    pers_komp_id integer NOT NULL,
+    person_id integer NOT NULL,
+    kompetence_id integer NOT NULL,
+    PRIMARY KEY (pers_komp_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.person
+(
+    person_id integer NOT NULL,
+    navn text NOT NULL,
+    tlf text NOT NULL,
+    email text NOT NULL,
+    foedselsdato date NOT NULL,
+    rolle_id integer NOT NULL,
+    team_id integer,
+    PRIMARY KEY (person_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.rolletype
+(
+    rolle_id integer NOT NULL,
+    rolle text NOT NULL,
+    PRIMARY KEY (rolle_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.team
+(
+    team_id integer NOT NULL,
+    navn text NOT NULL,
+    kategori_id integer NOT NULL,
+    PRIMARY KEY (team_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.vagter
+(
+    vagt_id integer NOT NULL,
+    opgave_id integer NOT NULL,
+    start_tid timestamp without time zone NOT NULL,
+    slut_tid timestamp without time zone NOT NULL,
+    dato date NOT NULL,
+    person_id integer,
+    type text NOT NULL,
+    status text,
+    changed timestamp with time zone,
+    PRIMARY KEY (vagt_id)
+);
+
+ALTER TABLE public.opgaver
+    ADD FOREIGN KEY (kategori_id)
+    REFERENCES public.kategori (kategori_id)
+    
+
+ALTER TABLE public.pers_komp
+    ADD FOREIGN KEY (kompetence_id)
+    REFERENCES public.kompetence (kompetence_id)
+    
+
+ALTER TABLE public.pers_komp
+    ADD FOREIGN KEY (person_id)
+    REFERENCES public.person (person_id)
+    
+
+ALTER TABLE public.person
+    ADD FOREIGN KEY (rolle_id)
+    REFERENCES public.rolletype (rolle_id)
+    
+
+ALTER TABLE public.person
+    ADD FOREIGN KEY (team_id)
+    REFERENCES public.team (team_id)
+    
+
+ALTER TABLE public.team
+    ADD FOREIGN KEY (kategori_id)
+    REFERENCES public.kategori (kategori_id)
+    
+
+ALTER TABLE public.vagter
+    ADD FOREIGN KEY (opgave_id)
+    REFERENCES public.opgaver (opgave_id)
+    
+
+ALTER TABLE public.vagter
+    ADD FOREIGN KEY (person_id)
+    REFERENCES public.person (person_id)
+    
+END;
+
+
+---------Orettelse af trigger + trigger funktion-------------
+-- 1. Tilføj en ny kolonne til vagter-tabellen.
+ALTER TABLE public.vagter 
+   ADD COLUMN changed timestamp with time zone DEFAULT now(); 
+
+-- 2. Opret funktion til at registrere ændringstiden vagter-tabellen 
+CREATE OR REPLACE FUNCTION set_vagtstatus_changed() 
+   RETURNS trigger 
+   LANGUAGE 'plpgsql' 
+AS $BODY$ 
+BEGIN 
+UPDATE vagter  
+  SET changed = now()  
+  WHERE "vagt_id" = NEW."vagt_id"; 
+return NEW; 
+END; 
+$BODY$; 
+
+-- 3. Opret en Update trigger på vagter-tabellen til at kalde funktionen herover 
+CREATE TRIGGER record_change_timestamp 
+   AFTER UPDATE  
+   ON vagter 
+   FOR EACH ROW 
+   WHEN (pg_trigger_depth() = 0) -- Undgå recursivitet! 
+       EXECUTE FUNCTION set_vagtstatus_changed(); 
+
+
+---------Oprettelse af views---------
+-- 1. Vagt view
+CREATE OR REPLACE VIEW public.v_v
+ AS
+ SELECT vagter.vagt_id,
+    vagter.start_tid,
+    vagter.slut_tid,
+    vagter.dato,
+    vagter.type,
+    vagter.status,
+    vagter.changed,
+    opgaver.opgave_id,
+    opgaver.opgave_navn,
+    opgaver.beskrivelse,
+    person.person_id,
+    person.navn
+   FROM vagter
+     LEFT JOIN opgaver USING (opgave_id)
+     LEFT JOIN person USING (person_id);
+
+ALTER TABLE public.v_v
+    OWNER TO dbadmin;
+
+-- 2. Person_kompetence view
+CREATE OR REPLACE VIEW public.perskomp
+ AS
+ SELECT person.person_id,
+    person.navn,
+    person.tlf,
+    person.email,
+    person.foedselsdato,
+    kompetence.kompetence_id,
+    kompetence.type
+   FROM person
+     LEFT JOIN pers_komp USING (person_id)
+     LEFT JOIN kompetence USING (kompetence_id);
+
+ALTER TABLE public.perskomp
+    OWNER TO dbadmin;
+
