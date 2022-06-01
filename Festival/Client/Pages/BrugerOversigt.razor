@@ -51,7 +51,7 @@
             <td>@item.PersonNavn</td>
             <td>@item.PersonTlf</td>
             <td>@item.PersonEmail</td>
-            <td>@item.PersonFoedselsdato.ToString("dd/MM/yyyy")</td>
+            <td>@item.PersonFoedselsdato.ToString("dd'/'MM'/'yyyy")</td>
             <td>@RolleTitel[item.RolleID]</td>
             <td id="KnapSlettd"><button id="SletKnap" style="background-color:red" type="button" @onclick="() => OnDeletePerson(item)">Slet</button></td>
             <td id="KnapRettd"><button id="RetKnap" style="background-color: rgb(255,191,0)" type="button" @onclick="() => ShowEditSection(item.PersonID)">Ret</button></td>

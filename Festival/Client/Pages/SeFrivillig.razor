@@ -29,9 +29,7 @@
             <td>@item.PersonID</td>
             <td>@item.PersonTlf</td>
             <td>@item.PersonEmail</td>
-            <td>
-                @item.PersonFoedselsdato.Day/@item.PersonFoedselsdato.Month/@item.PersonFoedselsdato.Year
-            </td>
+            <td>@item.PersonFoedselsdato.ToString("dd'/'MM'/'yyyy")</td>
         </tr>
     }
 </table>

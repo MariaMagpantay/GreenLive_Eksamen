@@ -37,9 +37,9 @@
             @if (@item.PersonID < 1)
             {
                 <td>@item.VagtID</td>
-                <td>@item.StartTid.ToString("HH:mm")</td>
-                <td>@item.SlutTid.ToString("HH:mm")</td>
-                <td>@item.Dato.Day/@item.Dato.Month</td>
+                <td>@item.StartTid.ToString("HH':'mm")</td>
+                <td>@item.SlutTid.ToString("HH':'mm")</td>
+                <td>@item.Dato.ToString("dd'/'MM")</td>
                 <td>@item.Type</td>
                 <td>@item.OpgaveNavn</td>
                 <td>@item.Beskrivelse</td>

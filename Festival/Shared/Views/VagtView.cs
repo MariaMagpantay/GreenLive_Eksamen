@@ -41,6 +41,6 @@ namespace Festival.Shared.Views
 
         public string? Status { get; set; }
 
-        public DateTime? Changed { get; set; } 
+        public DateTime Changed { get; set; } 
     }
 }

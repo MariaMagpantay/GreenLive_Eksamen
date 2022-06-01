@@ -1,8 +1,9 @@
 ﻿@using Festival.Client.Service
 @using Festival.Shared.Models
-@using Festival.Shared.Views;
+@using Festival.Shared.Views
 @using System.Net
 @using System.Diagnostics
+@using System
 @page "/vagtstatus"
 
 <PageTitle>Vagt Status</PageTitle>
@@ -55,10 +56,10 @@
                 <td>@item.VagtID</td>
                 <td>@item.StartTid.ToString("HH:mm")</td>
                 <td>@item.SlutTid.ToString("HH:mm")</td>
-                <td>@item.Dato.Day/@item.Dato.Month</td>
+                <td>@item.Dato.ToString("dd'/'MM")</td>
                 <td>@item.Type</td>
                 <td>@item.Status</td>
-                <td>@item.Changed</td>
+                <td>@item.Changed.ToLocalTime()</td>
 
                 <td id="KnapTagVagt"><button style="background-color:rgb(255,191,0)" type="button" @onclick="() => ShowStatusSelectSection(item)">Opdatér Status</button></td>
            }
