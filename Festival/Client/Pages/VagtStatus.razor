@@ -41,6 +41,7 @@
         <th>Dato</th>
         <th>Vagttype</th>
         <th>Status</th>
+        <th>Ændringstidspunkt</th>
     </tr>
 
     @foreach (var item in BesatteVagter) //loop
@@ -57,14 +58,12 @@
                 <td>@item.Dato.Day/@item.Dato.Month</td>
                 <td>@item.Type</td>
                 <td>@item.Status</td>
+                <td>@item.Changed</td>
 
                 <td id="KnapTagVagt"><button style="background-color:rgb(255,191,0)" type="button" @onclick="() => ShowStatusSelectSection(item)">Opdatér Status</button></td>
-            }
-
+           }
         </tr>
-
-    }
-
+   }
 </table>
 
 
@@ -84,14 +83,13 @@
     private int IDSelected { get; set; }
     private bool TagVagtSectionVisible = false;
 
+
     protected override async Task OnInitializedAsync() //metode lidt ligesom ToString(), fra "componentbase" som kan overrides
     {
         Console.WriteLine("kalder api/vagt");
         StatusVagt.Status = StatusValg[0];
         EditContext = new EditContext(StatusVagt);
         BesatteVagter = (await VagtService.GetAllVagter()).ToList(); //henter data og indsætter i Item listen. Bemærk paranteserne er vigtige her.
-                                                                     // EditContext = new EditContext(VagtStatus);
-                                                                     // VagtStatus.Status = StatusValg[0];
     }
 
     private async Task ShowStatusSelectSection(VagtView selectedvagt)

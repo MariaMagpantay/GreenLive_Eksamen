@@ -1,20 +1,13 @@
 ﻿using System;
-
 using System.Collections.Generic;
-
 using System.ComponentModel.DataAnnotations;
-
 using System.Linq;
-
 using System.Text;
-
 using System.Threading.Tasks;
 
 namespace Festival.Shared.Views
-
 {
     public class VagtView
-
     {
         [Required]
         public int VagtID { get; set; }
@@ -45,7 +38,9 @@ namespace Festival.Shared.Views
 
         [Required]
         public string Navn { get; set; }
-        public string? Status { get; set; }
-    }
 
+        public string? Status { get; set; }
+
+        public DateTime? Changed { get; set; } 
+    }
 }

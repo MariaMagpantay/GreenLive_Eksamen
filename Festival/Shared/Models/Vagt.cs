@@ -31,6 +31,8 @@ namespace Festival.Shared.Models
         public string VagtType { get; set; }
         
         public string? Status { get; set; }
+
+        public DateTime? Changed { get; set; }
     }
 
 }

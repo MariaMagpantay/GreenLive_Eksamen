@@ -118,7 +118,7 @@ namespace Festival.Server.Models
         public List<VagtView> GetAllVagter()
         {
             Console.WriteLine("get all in vagt view repository");
-            var sql = "SELECT vagt_id as vagtid, start_tid as starttid, slut_tid as sluttid, dato, type, status, opgave_id as opgaveid, opgave_navn as opgavenavn, beskrivelse, person_id as personid, navn FROM v_v as opgavevagter ORDER BY vagt_id ASC";
+            var sql = "SELECT vagt_id as vagtid, start_tid as starttid, slut_tid as sluttid, dato, type, status, changed, opgave_id as opgaveid, opgave_navn as opgavenavn, beskrivelse, person_id as personid, navn FROM v_v as opgavevagter ORDER BY vagt_id ASC";
             var personer = db.connection.Query<VagtView>(sql);
             return personer.ToList();
         }
@@ -161,7 +161,6 @@ namespace Festival.Server.Models
             }
 
         }
-
 
 
         private bool ExistsVagtWithID(int? id)//Hjælpemetode til UpdateVagt og UpdateVagtStatus
