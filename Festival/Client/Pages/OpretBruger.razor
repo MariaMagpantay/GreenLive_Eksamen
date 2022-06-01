@@ -50,17 +50,17 @@
     <br />
 
     <div>
-        <br />
         <p>
             Meddelelse:
             <label style="color: green"><b>@MedPer</b></label>
             <label style="color: red"><b>@MedPerFail</b></label>
         </p>
-        <h3>Tilføj Kompetencer</h3>
     </div>
 </EditForm>
 
 <EditForm EditContext="@EditContext" class="row p-3">
+    <h3>Tilføj Kompetencer</h3>
+
     <div class="col-md-6 mb-3">
         <label for="Personensid">Indtast dit Person ID</label>
         <InputNumber id="Personensid" @bind-Value="newKompetence.PersonID" class="form-control" />
