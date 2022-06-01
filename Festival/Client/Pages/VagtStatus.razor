@@ -51,7 +51,7 @@
                 <td>@item.Dato.ToString("dd'/'MM")</td>
                 <td>@item.Type</td>
                 <td>@item.Status</td>
-                <td>@item.Changed.ToLocalTime()</td>
+                <td>@item.Changed.ToLocalTime()</td> @*En trigger fra databasen bliver brugt her til at logge ændringstidspunktet for Status*@
 
                 @*Nedenfor en knap som udfører metoden til at vise den editform, hvor Status på vagten kan ændres*@
                 <td id="KnapTagVagt"><button style="background-color:rgb(255,191,0)" type="button" @onclick="() => ShowStatusSelectSection(item)">Opdatér Status</button></td>
