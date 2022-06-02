@@ -36,11 +36,6 @@ namespace Festival.Client.Service
             return (int)responseStatusCode;
         }
 
-        public async Task<Person> GetPerson(int id)
-        {
-            var result = await httpClient.GetFromJsonAsync<Person>("api/person/" + id);
-            return result;
-        }
 
         public async Task<int> DeletePerson(int id)
         {

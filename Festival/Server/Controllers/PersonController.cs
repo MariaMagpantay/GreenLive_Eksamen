@@ -6,7 +6,7 @@ using System.Net;
 
 namespace Festival.Server.Controllers
 {
-    [ApiController]
+    [ApiController] //tager imod request fra klienten (rest api)
     [Route("api/person")]
     public class PersonController : ControllerBase
     {
@@ -46,21 +46,14 @@ namespace Festival.Server.Controllers
             Repository.UpdatePerson(item);
         }
 
-        [HttpGet("{id:int}")]
-        public Person GetPerson(int id)
-        {
-            var result = Repository.GetPerson(id);
-            return result;
-        }
-
-
+    
         [HttpDelete("{id:int}")]
         public StatusCodeResult DeletePerson(int id)
         {
             Console.WriteLine("Server: Delete person called: id = " + id);
-            Repository.DeletePersKomp(id);
-            Repository.RemovePersonFromVagter(id);
-            bool deleted = Repository.DeletePerson(id);
+            Repository.DeletePersKomp(id); //den ønskede slettede persons kompetencer bliver også slettet
+            Repository.RemovePersonFromVagter(id); //den ønskede slettede persons vagter bliver også slettet
+            bool deleted = Repository.DeletePerson(id); //sletter en person
             if (deleted)
             {
                 Console.WriteLine("Server: Item deleted succces");

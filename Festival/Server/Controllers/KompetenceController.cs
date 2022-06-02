@@ -6,7 +6,7 @@ using System.Net;
 
 namespace Festival.Server.Controllers
 {
-    [ApiController]
+    [ApiController] //tager imod request fra klienten (rest api)
     [Route("api/kompetence")]
     public class KompetenceController : ControllerBase
     {

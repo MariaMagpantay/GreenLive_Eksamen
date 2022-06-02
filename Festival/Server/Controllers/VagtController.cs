@@ -7,7 +7,7 @@ using System.Net;
 
 namespace Festival.Server.Controllers
 {
-    [ApiController]
+    [ApiController] //tager imod request fra klienten (rest api)
     [Route("api/vagt")]
     public class VagtController : ControllerBase
     {

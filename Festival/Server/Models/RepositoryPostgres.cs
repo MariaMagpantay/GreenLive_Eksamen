@@ -29,8 +29,7 @@ namespace Festival.Server.Models
             parameters.Add("PersonTlf", newPerson.PersonTlf);
             parameters.Add("PersonFoedselsdato", newPerson.PersonFoedselsdato);
             parameters.Add("RolleID", newPerson.RolleID);
-            //parameters.Add("TeamID", newPerson.TeamID); 
-
+           
             var sql = "INSERT INTO person (navn, email, tlf, foedselsdato, rolle_id) VALUES (@PersonNavn, @PersonEmail, @PersonTlf, @PersonFoedselsdato, @RolleID) RETURNING person_id";
             var newPersonId = db.connection.ExecuteScalar<int>(sql, parameters);
             Console.WriteLine("person er added");
@@ -66,10 +65,6 @@ namespace Festival.Server.Models
             return person.Any();  //returner id = -1 hvis ikke fundet. 
         }
 
-        public Person GetPerson(int id)
-        {
-            return new Person();
-        }
 
         public bool DeletePerson(int id)
         {

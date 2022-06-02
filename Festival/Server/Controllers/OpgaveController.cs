@@ -6,7 +6,7 @@ using Festival.Shared.Views;
 
 namespace Festival.Server.Controllers
 {
-    [ApiController]
+    [ApiController] //tager imod request fra klienten (rest api)
     [Route("api/opgaver")]
     public class OpgaveController : ControllerBase
     {

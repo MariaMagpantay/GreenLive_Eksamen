@@ -11,7 +11,7 @@ namespace Festival.Server.Models
         List<Person> GetAllPersoner(); //metode til at hente alle personer ind i listen
         int AddPerson(Person newPerson); //metode til at tilføje en person til vores database
         bool UpdatePerson(Person item); //metode til at updatere en persons data i databasen
-        Person GetPerson(int id); //metode til at hente én person på et bestemt id
+
         bool DeletePerson(int id); //metode til at slette en person fra vores database
         bool DeletePersKomp(int id); //metode til at hjælpe med slette en person fra vores database, hvor der er FK'er 
         void RemovePersonFromVagter(int PersonID); //metode til at hjælpe med slette en person fra vores database, hvor der er FK'er
@@ -35,12 +35,16 @@ namespace Festival.Server.Models
         void AddKompetence(Perskomp newKompetence); //metode til at tilføje en kompetence til vores accosiations-table pers_komp fra databasen
 
 
+
         // Til Frivillig controller
         List<PersonKompetence> GetAllFrivillige(); //metode til at hente alle frivillige med kompetencer ind i listen fra et view
 
 
+
         // Til Opgaver controller
         List<Opgaver> GetAllOpgaver(); //metode til at hente alle opgaver ind i listen
+
+
 
         // Til Status controller
         bool UpdateVagtStatus(Vagt status); //metode til at updatere en vagtstatus i databasen

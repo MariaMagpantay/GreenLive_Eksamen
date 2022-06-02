@@ -5,7 +5,7 @@ using Festival.Shared.Models;
 
 namespace Festival.Server.Controllers
 {
-    [ApiController]
+    [ApiController] //tager imod request fra klienten
     [Route("api/rolle")]
     public class RolleController : ControllerBase
     {

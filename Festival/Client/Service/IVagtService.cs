@@ -9,9 +9,9 @@ namespace Festival.Client.Service
 
     public interface IVagtService
     {
-        Task<VagtView[]?> GetAllVagter(); //henter alle obejkter i listen ind i et array 
-        Task<int> AddVagt(Vagt newVagt); //tilføjer en vagt til databasen 
-        Task<int> UpdateVagt(Vagt item); //updaterer en vagt i databasen
+        Task<VagtView[]?> GetAllVagter(); //henter alle vagter 
+        Task<int> AddVagt(Vagt newVagt); //tilføjer en vagt 
+        Task<int> UpdateVagt(Vagt item); //updaterer en vagt
 
     }
 }

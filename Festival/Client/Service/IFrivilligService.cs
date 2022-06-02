@@ -5,6 +5,6 @@ namespace Festival.Client.Service
 {
     public interface IFrivilligService
     {
-        Task<PersonKompetence[]?> GetAllFrivillige(); //henter alle personer med kompetancer fra view
+        Task<PersonKompetence[]?> GetAllFrivillige(); //henter alle personer med kompetencer fra view
     }
 }

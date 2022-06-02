@@ -5,6 +5,6 @@ namespace Festival.Client.Service
 {
     public interface IOpgaveService
     {
-        Task<Opgaver[]?> GetAllOpgaver(); //henter alle opgaver ind i en liste 
+        Task<Opgaver[]?> GetAllOpgaver(); //henter alle opgaver 
     }
 }
